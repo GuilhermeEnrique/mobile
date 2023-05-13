@@ -2,14 +2,16 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Home from '../pages/Home';
-import SignIn from '../pages/SignIn'
+import SignIn from '../pages/SignIn';
+import Register from '../pages/Register';
+import Dashboard from '../pages/Dashboard';
 
 const Stack = createNativeStackNavigator();
 
 function AuthRoutes() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
+            <Stack.Screen name="SignIn" component={Dashboard} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }
