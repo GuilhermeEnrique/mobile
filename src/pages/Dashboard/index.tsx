@@ -2,15 +2,13 @@ import React from "react"
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native"
 import { FontAwesome } from '@expo/vector-icons';
 
-
-
 export default function Dashboard() {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.buttonProfile}>
                 <Image
                     style={styles.imagem}
-                    source={require('../../assets/user.png')}
+                    source={require('../../assets/usuario.png')}
                 />
                 <View style={styles.textProfile}>
                     <Text style={styles.text}>Olá, user</Text>
@@ -48,17 +46,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    button: {
-        marginVertical: 21,
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 180,
-        width: '80%',
-        borderRadius: 20,
-        borderColor: 'dark',
-        backgroundColor: 'grey',
-        borderWidth: 1
+        backgroundColor: '#F8FAFF',
     },
     text: {
         color: '#F8FAFF',
@@ -69,9 +57,10 @@ const styles = StyleSheet.create({
         textShadowRadius: 10,
     },
     imagem: {
-        width: '70%',
+        width: '50%',
         height: 160,
-        borderRadius: 20
+        borderRadius: 20,
+        alignItems: 'center'
     },
     buttonProfile: {
         flexDirection: 'row',
@@ -89,7 +78,8 @@ const styles = StyleSheet.create({
     textProfile: {
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginRight: 25
     },
     icon: {
         color: '#000',
