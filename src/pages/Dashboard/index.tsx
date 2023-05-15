@@ -1,43 +1,53 @@
-import React from "react"
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native"
+import React, { useContext } from "react"
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from "react-native"
 import { FontAwesome } from '@expo/vector-icons';
 
+import { AuthContext } from "../../contexts/AuthContext";
+
 export default function Dashboard() {
+    const { signOut } = useContext(AuthContext);
+
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <TouchableOpacity style={styles.buttonProfile}>
                 <Image
                     style={styles.imagem}
                     source={require('../../assets/usuario.png')}
                 />
-                <View style={styles.textProfile}>
-                    <Text style={styles.text}>Olá, user</Text>
+                <View style={styles.containerProfile}>
+                    <Text style={styles.text}>Olá, usuario</Text>
                     <FontAwesome name="edit" size={24} style={styles.icon} />
                     <Text style={styles.textEdit}>Editar Perfil</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonCampanha}>
+            <TouchableOpacity style={styles.buttons}>
                 <Image
-                    style={styles.imagemCampanha}
+                    style={styles.imagemButtons}
                     source={require('../../assets/mapa.png')}
                 />
-                <Text style={styles.textCampanha}>Campanha</Text>
+                <Text style={styles.textButtons}>Campanha</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonPersonagem}>
+            <TouchableOpacity style={styles.buttons}>
                 <Image
-                    style={styles.imagemPersonagem}
+                    style={styles.imagemButtons}
                     source={require('../../assets/personagem.png')}
                 />
-                <Text style={styles.textPersonagem}>Ficha de personagem</Text>
+                <Text style={styles.textButtons}>Ficha de personagem</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonDados}>
+            <TouchableOpacity style={styles.buttons}>
                 <Image
-                    style={styles.imagemDados}
+                    style={styles.imagemButtons}
                     source={require('../../assets/dados.png')}
                 />
-                <Text style={styles.text}>Dados</Text>
+                <Text style={styles.textButtons}>Dados</Text>
             </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={signOut}>
+                <Text style={styles.textSignOut}>Sair da conta</Text>
+            </TouchableOpacity>
+
+        </SafeAreaView>
     )
 }
 
@@ -45,8 +55,31 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         backgroundColor: '#F8FAFF',
+    },
+    //Botão de saída
+    button: {
+        backgroundColor: '#000',
+        marginBottom: 30,
+        marginTop: 20,
+        height: 50,
+        borderRadius: 20,
+        padding: 16,
+        alignContent: 'center',
+        justifyContent: 'center'
+    },
+    textSignOut: {
+        color: '#F8FAFF',
+        fontSize: 15,
+    },
+
+    //Butão de perfil
+    containerProfile: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 25,
     },
     text: {
         color: '#F8FAFF',
@@ -67,19 +100,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 16,
-        marginVertical: 21,
+        marginVertical: 10,
         height: 180,
         width: '80%',
         borderRadius: 20,
         borderColor: 'dark',
         backgroundColor: '#EDE8E8',
         borderWidth: 1,
-    },
-    textProfile: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: 25
+
+        shadowColor: '#000',
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        elevation: 5,
     },
     icon: {
         color: '#000',
@@ -96,23 +132,37 @@ const styles = StyleSheet.create({
         textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 10,
     },
-    imagemCampanha: {
-        width: '80%',
-        height: 180,
+
+    //Botões da pagina
+    imagemButtons: {
+        width: '100%',
+        height: 190,
         position: 'absolute',
         borderRadius: 20,
         borderWidth: 1,
         borderColor: '#000',
+
     },
-    buttonCampanha: {
+    buttons: {
         flex: 1,
-        alignSelf: 'stretch',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'transparent',
-        overflow: 'hidden',
+        height: 1900,
+        width: '80%',
+        borderRadius: 20,
+        marginBottom: 15,
+
+        shadowColor: '#000',
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        elevation: 5,
     },
-    textCampanha: {
+    textButtons: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 20,
@@ -121,59 +171,6 @@ const styles = StyleSheet.create({
         textShadowColor: '#000',
         textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 10,
-    },
-    imagemPersonagem: {
-        width: '80%',
-        height: 180,
-        position: 'absolute',
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#000',
-    },
-    buttonPersonagem: {
-        flex: 1,
-        alignSelf: 'stretch',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'transparent',
-        overflow: 'hidden',
-    },
-    textPersonagem: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 20,
-        textAlign: 'center',
-        zIndex: 1,
-        textShadowColor: '#000',
-        textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 10,
-    },
-    imagemDados: {
-        width: '80%',
-        height: 180,
-        position: 'absolute',
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#000',
-    },
-    buttonDados: {
-        flex: 1,
-        alignSelf: 'stretch',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'transparent',
-        overflow: 'hidden',
-        marginBottom: 20
-    },
-    textDados: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 20,
-        textAlign: 'center',
-        zIndex: 1,
-        textShadowColor: '#000',
-        textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 10,
-    },
+    }
 
 })

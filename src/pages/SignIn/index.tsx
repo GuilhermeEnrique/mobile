@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, ActivityIndicator } from "react-native";
 
 import { AuthContext } from "../../contexts/AuthContext";
 
 export default function Home() {
-    const { signIn } = useContext(AuthContext)
+    const { signIn, loadingAuth } = useContext(AuthContext)
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -14,7 +14,7 @@ export default function Home() {
             return;
         }
 
-        await signIn({email, password});
+        await signIn({ email, password });
     }
 
     return (
@@ -43,7 +43,11 @@ export default function Home() {
                     <Text style={{ color: 'blue' }}>Esqueceu sua senha?</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.textButton}>Acessar</Text>
+                    {loadingAuth ? (
+                        <ActivityIndicator size={25} color='#fff' />
+                    ) : (
+                        <Text style={styles.textButton}>Acessar</Text>
+                    )}
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.register} >
                     <Text style={{ color: '#000' }}>Não possui uma conta?</Text><Text style={styles.textRegister}> Registre-se</Text>
