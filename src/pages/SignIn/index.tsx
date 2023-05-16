@@ -48,7 +48,7 @@ export default function Home() {
                     onChangeText={(text) => setPassword(text)}
                 />
                 <TouchableOpacity style={styles.resetPassword}>
-                    <Text style={{ color: 'blue', fontSize: 17 }}>Esqueceu sua senha?</Text>
+                    <Text style={{ color: 'blue', fontSize: 16 }}>Esqueceu sua senha?</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={handleLogin}>
                     {loadingAuth ? (
@@ -58,7 +58,7 @@ export default function Home() {
                     )}
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.register} onPress={Register} >
-                    <Text style={{ color: '#000', fontSize: 17 }}>Não possui uma conta?</Text><Text style={styles.textRegister}> Registre-se</Text>
+                    <Text style={{ color: '#000', fontSize: 16 }}>Não possui uma conta?</Text><Text style={styles.textRegister}> Registre-se</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         marginBottom: 300,
-    }, resetPassword: {
+    },
+    resetPassword: {
         marginTop: 13,
         fontSize: 17
     },
