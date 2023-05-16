@@ -62,6 +62,7 @@ export default function Dashboard() {
             <TouchableOpacity
                 style={styles.button}
                 onPress={signOut}>
+                <FontAwesome name="sign-out" size={20} color='#F8FAFF' />
                 <Text style={styles.textSignOut}>Sair da conta</Text>
             </TouchableOpacity>
 
@@ -80,16 +81,17 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: '#000',
         marginBottom: 30,
-        marginTop: 20,
         height: 50,
         borderRadius: 20,
-        padding: 16,
+        padding: 15,
         alignContent: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        flexDirection: 'row'
     },
     textSignOut: {
         color: '#F8FAFF',
         fontSize: 15,
+        marginLeft: 10
     },
 
     //Butão de perfil
