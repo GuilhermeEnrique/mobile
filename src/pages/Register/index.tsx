@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackParmsList } from "../../routers/auth.routes";
 
 export default function Home() {
+    const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [user, setUser] = useState('')
 
     function handleRegister() {
         alert("Registrado")
+    }
+
+    async function SignIn() {
+        navigation.navigate('SignIn')
     }
 
     return (
@@ -48,7 +56,7 @@ export default function Home() {
                 <TouchableOpacity style={styles.button} onPress={handleRegister}>
                     <Text style={styles.textButton}>Acessar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.register} >
+                <TouchableOpacity style={styles.register} onPress={SignIn} >
                     <Text style={{ color: '#000', fontSize: 17 }}>Já possui uma conta?</Text><Text style={styles.textRegister}> Entrar</Text>
                 </TouchableOpacity>
             </View>
@@ -90,7 +98,7 @@ const styles = StyleSheet.create({
     },
     buttoEye: {
         margin: 13,
-    }, 
+    },
     password: {
         padding: 16,
         width: '80%'

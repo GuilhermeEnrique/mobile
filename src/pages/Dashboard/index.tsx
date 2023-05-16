@@ -1,40 +1,58 @@
 import React, { useContext } from "react"
 import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from "react-native"
 import { FontAwesome } from '@expo/vector-icons';
-
+import { StackParmsList } from "../../routers/app.routes";
 import { AuthContext } from "../../contexts/AuthContext";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
 
 export default function Dashboard() {
+    const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
     const { signOut } = useContext(AuthContext);
 
+    async function Campanhas() {
+        navigation.navigate('Campanhas');
+    }
+
+    async function Personagens() {
+        navigation.navigate('CreatePersonagem');
+    }
+
+    async function Dados() {
+        navigation.navigate('Dice');
+    }
+    async function Profile() {
+        navigation.navigate('Profile');
+    }
     return (
         <SafeAreaView style={styles.container}>
-            <TouchableOpacity style={styles.buttonProfile}>
+            <TouchableOpacity style={styles.buttonProfile} onPress={Profile}>
                 <Image
                     style={styles.imagem}
                     source={require('../../assets/usuario.png')}
                 />
-                <View style={styles.containerProfile}>
+                <View style={styles.containerProfile} >
                     <Text style={styles.text}>Olá, usuario</Text>
                     <FontAwesome name="edit" size={24} style={styles.icon} />
                     <Text style={styles.textEdit}>Editar Perfil</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttons}>
+            <TouchableOpacity style={styles.buttons} onPress={Campanhas}>
                 <Image
                     style={styles.imagemButtons}
                     source={require('../../assets/mapa.png')}
                 />
                 <Text style={styles.textButtons}>Campanha</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttons}>
+            <TouchableOpacity style={styles.buttons} onPress={Personagens}>
                 <Image
                     style={styles.imagemButtons}
                     source={require('../../assets/personagem.png')}
                 />
                 <Text style={styles.textButtons}>Ficha de personagem</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttons}>
+            <TouchableOpacity style={styles.buttons} onPress={Dados}>
                 <Image
                     style={styles.imagemButtons}
                     source={require('../../assets/dados.png')}

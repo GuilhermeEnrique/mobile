@@ -1,7 +1,18 @@
 import React from "react";
 import { View, Text, StyleSheet, ImageBackground, StatusBar, Image, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackParmsList } from "../../routers/auth.routes";
 
 export default function Home() {
+    const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
+    async function SignIn() {
+        navigation.navigate('SignIn')
+    }
+
+    async function Register() {
+        navigation.navigate('Register')
+    }
 
 
     return (
@@ -19,10 +30,10 @@ export default function Home() {
                 </View>
 
                 <View style={styles.buttonsContainer}>
-                    <TouchableOpacity style={styles.buttonEntrar}>
+                    <TouchableOpacity style={styles.buttonEntrar} onPress={SignIn}>
                         <Text style={styles.textEntrar}>Entrar</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonCadastrar}>
+                    <TouchableOpacity style={styles.buttonCadastrar} onPress={Register}>
                         <Text style={styles.textCadastrar}>Cadastrar</Text>
                     </TouchableOpacity>
                     <Image
@@ -41,7 +52,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: 'flex-start',
-        justifyContent: 'space-between', 
+        justifyContent: 'space-between',
         padding: 25,
     },
     backgroundImage: {

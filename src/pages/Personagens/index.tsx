@@ -1,26 +1,18 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
 import { FontAwesome } from '@expo/vector-icons'
-import { StackParmsList } from '../../routers/app.routes';
 
 export default function Campanhas() {
-    const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
-
-    async function Campanhas() {
-        navigation.navigate('CreateCampanhas');
-    }
-
     return (
         <View style={styles.container}>
             <Text style={styles.title}>
-                Suas campanhas
+                Seus personagens
             </Text>
 
-            <TouchableOpacity style={styles.buttonNewCampanha} onPress={Campanhas}>
+            <TouchableOpacity style={styles.buttonNewCampanha}>
                 <FontAwesome name="plus-circle" size={24} style={styles.IconNewCampanha} />
-                <Text style={styles.TitleNewCampanha}>Criar uma nova Campanha</Text>
+                <Text style={styles.TitleNewCampanha}>Criar um novo personagem</Text>
             </TouchableOpacity>
         </View>
     )

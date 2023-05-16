@@ -1,9 +1,12 @@
 import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, ActivityIndicator } from "react-native";
-
 import { AuthContext } from "../../contexts/AuthContext";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackParmsList } from "../../routers/auth.routes";
 
 export default function Home() {
+    const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
     const { signIn, loadingAuth } = useContext(AuthContext)
 
     const [email, setEmail] = useState('')
@@ -16,6 +19,11 @@ export default function Home() {
 
         await signIn({ email, password });
     }
+
+    async function Register() {
+        navigation.navigate('Register')
+    }
+
 
     return (
         <View style={styles.container}>
@@ -40,7 +48,7 @@ export default function Home() {
                     onChangeText={(text) => setPassword(text)}
                 />
                 <TouchableOpacity style={styles.resetPassword}>
-                    <Text style={{ color: 'blue' }}>Esqueceu sua senha?</Text>
+                    <Text style={{ color: 'blue', fontSize: 17 }}>Esqueceu sua senha?</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={handleLogin}>
                     {loadingAuth ? (
@@ -49,8 +57,8 @@ export default function Home() {
                         <Text style={styles.textButton}>Acessar</Text>
                     )}
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.register} >
-                    <Text style={{ color: '#000' }}>Não possui uma conta?</Text><Text style={styles.textRegister}> Registre-se</Text>
+                <TouchableOpacity style={styles.register} onPress={Register} >
+                    <Text style={{ color: '#000', fontSize: 17 }}>Não possui uma conta?</Text><Text style={styles.textRegister}> Registre-se</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -92,6 +100,7 @@ const styles = StyleSheet.create({
         marginBottom: 300,
     }, resetPassword: {
         marginTop: 13,
+        fontSize: 17
     },
     button: {
         marginTop: 20,
@@ -114,6 +123,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     textRegister: {
-        color: 'blue'
+        color: 'blue',
+        fontSize: 17
     }
 })

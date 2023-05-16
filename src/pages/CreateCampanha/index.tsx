@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Button } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker';
+
 
 //npm install react-native-image-picker
 // Link a biblioteca executando o seguinte comando no terminal:
@@ -9,7 +10,30 @@ import * as ImagePicker from 'expo-image-picker';
 
 
 export default function CreateCampanhas() {
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [avatarUrl, setAvatarUrl] = useState('');
 
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: false,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            setAvatarUrl(result.assets[0].uri);
+        }
+    };
+
+    async function openCampanha() {
+        if (title === '' || description === '' || avatarUrl === '') {
+            return
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -17,10 +41,18 @@ export default function CreateCampanhas() {
                 Criar uma campanha
             </Text>
             <View style={styles.Inputs}>
-
+                <TouchableOpacity style={styles.avatarButton} onPress={pickImage}>
+                    {avatarUrl ? (
+                        <Image source={{ uri: avatarUrl }} style={styles.preview} />
+                    ) : (
+                        <><FontAwesome name="camera" size={24} color="black" /><Text>Selecionar avatar</Text></>
+                    )}
+                </TouchableOpacity>
                 <TextInput
                     placeholder='Nome da campanha'
                     style={styles.Input}
+                    value={title}
+                    onChangeText={(text) => setTitle(text)}
                 />
 
                 <TextInput
@@ -29,11 +61,13 @@ export default function CreateCampanhas() {
                     multiline={true}
                     numberOfLines={3}
                     textAlignVertical="top"
+                    value={description}
+                    onChangeText={(text) => setDescription(text)}
                 />
             </View>
 
             <View style={styles.buttons}>
-                <TouchableOpacity style={styles.buttonSalvar}>
+                <TouchableOpacity style={styles.buttonSalvar} onPress={openCampanha}>
                     <Text style={styles.textSalvar}>Salvar</Text>
                 </TouchableOpacity>
 
@@ -61,7 +95,23 @@ const styles = StyleSheet.create({
     },
     Inputs: {
         width: '90%',
-
+    },
+    avatarButton: {
+        width: '100%',
+        height: 280,
+        marginBottom: 8,
+        backgroundColor: '#EDE8E8',
+        borderWidth: 1,
+        borderColor: '#646262',
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    preview: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
+        borderRadius: 20,
     },
     Input: {
         backgroundColor: '#EDE8E8',
@@ -117,3 +167,4 @@ const styles = StyleSheet.create({
     }
 
 })
+
