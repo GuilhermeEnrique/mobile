@@ -24,6 +24,7 @@ export default function Dashboard() {
     }
     async function Profile() {
         navigation.navigate('Profile');
+        // {id: '213', name: 'Dice', email: 'dice@gmail.com'}
     }
     return (
         <SafeAreaView style={styles.container}>

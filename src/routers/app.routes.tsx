@@ -15,6 +15,11 @@ export type StackParmsList = {
     CreatePersonagem: undefined;
     Dice: undefined;
     Profile: undefined
+    // {
+    //     name: string;
+    //     id: string;
+    //     email: string;
+    // }
 };
 
 const Stack = createNativeStackNavigator<StackParmsList>();
