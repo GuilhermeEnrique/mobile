@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker';
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackParmsList } from '../../routers/app.routes';
 
 
 //npm install react-native-image-picker
@@ -10,19 +13,24 @@ import * as ImagePicker from 'expo-image-picker';
 
 
 export default function CreateCampanhas() {
+    const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [avatarUrl, setAvatarUrl] = useState('');
 
+    async function CreateCampanhas() {
+        navigation.navigate('Campanhas');
+    }
+
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: false,
+            allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
         });
 
-        console.log(result);
+        // console.log(result);
 
         if (!result.canceled) {
             setAvatarUrl(result.assets[0].uri);
@@ -71,7 +79,7 @@ export default function CreateCampanhas() {
                     <Text style={styles.textSalvar}>Salvar</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.buttonCancelar}>
+                <TouchableOpacity style={styles.buttonCancelar} onPress={CreateCampanhas}>
                     <Text style={styles.textCancelar}>Cancelar</Text>
                 </TouchableOpacity>
             </View>

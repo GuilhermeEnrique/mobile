@@ -1,9 +1,9 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput } from 'react-native';
 
 import { FontAwesome } from '@expo/vector-icons'
 
-export default function Campanhas() {
+export default function Profile() {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>
@@ -14,6 +14,9 @@ export default function Campanhas() {
                     style={styles.imagemProfile}
                     source={require('../../assets/usuario.png')}
                 />
+                <TouchableOpacity style={styles.iconProfile}>
+                    <FontAwesome name="camera" size={30} color="black" />
+                </TouchableOpacity>
                 <Text style={styles.subTitle}>Olá, usuário</Text>
                 <TextInput style={styles.input} placeholder='Id' editable={false} />
                 <TextInput style={styles.input} placeholder='Nome' />
@@ -47,6 +50,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '80%',
         marginBottom: 100
+    },
+    iconProfile: {
+        marginBottom: 2,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     title: {
         fontSize: 20,

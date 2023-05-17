@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 import { FontAwesome } from '@expo/vector-icons'
 
-export default function Campanhas() {
+export default function Personagens() {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>

@@ -4,7 +4,7 @@ import RNPickerSelect, { PickerStyle } from 'react-native-picker-select';
 
 import { FontAwesome } from '@expo/vector-icons'
 
-export default function Campanhas() {
+export default function Dados() {
 
     return (
         <View style={styles.container}>

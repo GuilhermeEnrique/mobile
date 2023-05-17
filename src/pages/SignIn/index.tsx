@@ -5,12 +5,20 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParmsList } from "../../routers/auth.routes";
 
-export default function Home() {
+import { FontAwesome } from '@expo/vector-icons';
+
+export default function SignIn() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
     const { signIn, loadingAuth } = useContext(AuthContext)
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
+    const [showPassword, setShowPassword] = useState(false);
+
+    function toggleShowPassword() {
+        setShowPassword(!showPassword);
+    }
 
     async function handleLogin() {
         if (email === '' || password === '') {
@@ -40,13 +48,18 @@ export default function Home() {
                     value={email}
                     onChangeText={(text) => setEmail(text)}
                 />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Senha"
-                    secureTextEntry={true}
-                    value={password}
-                    onChangeText={(text) => setPassword(text)}
-                />
+                <View style={styles.inputPassword}>
+                    <TextInput
+                        style={styles.password}
+                        placeholder="Senha"
+                        secureTextEntry={!showPassword}
+                        value={password}
+                        onChangeText={(text) => setPassword(text)}
+                    />
+                    <TouchableOpacity style={styles.buttonEye} onPress={toggleShowPassword}>
+                        <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={24} color="#000" />
+                    </TouchableOpacity>
+                </View>
                 <TouchableOpacity style={styles.resetPassword}>
                     <Text style={{ color: 'blue', fontSize: 16 }}>Esqueceu sua senha?</Text>
                 </TouchableOpacity>
@@ -94,6 +107,26 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         height: 50,
         padding: 16,
+        borderRadius: 10
+    },
+    inputPassword: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    password: {
+        flex: 1,
+        backgroundColor: '#EDE8E8',
+        height: 50,
+        padding: 16,
+        borderRadius: 10
+    },
+    buttonEye: {
+        justifyContent: 'center',
+        backgroundColor: '#EDE8E8',
+        marginLeft: 10,
+        height: 50,
+        padding: 14,
         borderRadius: 10
     },
     inputContainer: {

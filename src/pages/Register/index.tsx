@@ -1,24 +1,37 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity } from "react-native";
+import React, { useContext, useState } from "react";
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParmsList } from "../../routers/auth.routes";
+import { AuthContext } from "../../contexts/AuthContext";
 
-export default function Home() {
+export default function SingUp() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
+
+    const { signUp, loadingAuth } = useContext(AuthContext)
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [user, setUser] = useState('')
+    const [name, setUser] = useState('')
 
-    function handleRegister() {
-        alert("Registrado")
+    const [showPassword, setShowPassword] = useState(false);
+
+    function toggleShowPassword() {
+        setShowPassword(!showPassword);
+    }
+
+    async function handleSignUp() {
+        if (email === '' || password === '' || name === '') {
+            return;
+        }
+
+        await signUp({ email, password, name });
     }
 
     async function SignIn() {
         navigation.navigate('SignIn')
     }
-
     return (
         <View style={styles.container}>
             <Image
@@ -31,7 +44,7 @@ export default function Home() {
                 <TextInput
                     style={styles.input}
                     placeholder="Usuário"
-                    value={user}
+                    value={name}
                     onChangeText={(text) => setUser(text)}
                 />
                 <TextInput
@@ -44,20 +57,24 @@ export default function Home() {
                     <TextInput
                         style={styles.password}
                         placeholder="Senha"
-                        secureTextEntry={true}
+                        secureTextEntry={!showPassword}
                         value={password}
                         onChangeText={(text) => setPassword(text)}
                     />
-                    <TouchableOpacity style={styles.buttoEye} >
-                        <FontAwesome name="eye" size={24} color="#000" opacity={0.7} />
+                    <TouchableOpacity style={styles.buttonEye} onPress={toggleShowPassword}>
+                        <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={24} color="#000" />
                     </TouchableOpacity>
                 </View>
-
-                <TouchableOpacity style={styles.button} onPress={handleRegister}>
-                    <Text style={styles.textButton}>Acessar</Text>
+                <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+                    {loadingAuth ? (
+                        <ActivityIndicator size={25} color="#fff" />
+                    ) : (
+                        <Text style={styles.textButton}>Registrar</Text>
+                    )}
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.register} onPress={SignIn} >
-                    <Text style={{ color: '#000', fontSize: 17 }}>Já possui uma conta?</Text><Text style={styles.textRegister}> Entrar</Text>
+                    <Text style={{ color: '#000', fontSize: 17 }}>Já possui uma conta?</Text>
+                    <Text style={styles.textRegister}> Entrar</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -89,19 +106,24 @@ const styles = StyleSheet.create({
         marginRight: 40
     },
     inputPassword: {
-        justifyContent: 'space-between',
-        alignItems: 'center',
         flexDirection: 'row',
-        backgroundColor: '#EDE8E8',
-        borderRadius: 10,
-        height: 50,
-    },
-    buttoEye: {
-        margin: 13,
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
     password: {
+        flex: 1,
+        backgroundColor: '#EDE8E8',
+        height: 50,
         padding: 16,
-        width: '80%'
+        borderRadius: 10
+    },
+    buttonEye: {
+        justifyContent: 'center',
+        backgroundColor: '#EDE8E8',
+        marginLeft: 10,
+        height: 50,
+        padding: 14,
+        borderRadius: 10
     },
     input: {
         backgroundColor: '#EDE8E8',
@@ -138,4 +160,4 @@ const styles = StyleSheet.create({
         color: 'blue',
         fontSize: 17
     }
-})
+});

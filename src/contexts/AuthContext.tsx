@@ -8,6 +8,7 @@ type AuthContextData = {
     signIn: (credentials: SignInProps) => Promise<void>;
     loadingAuth: boolean; loading: boolean;
     signOut: () => Promise<void>;
+    signUp: (credentials: SignUpProps) => Promise<void>;
 }
 
 type UserProps = {
@@ -26,6 +27,12 @@ type SignInProps = {
     password: string,
 }
 
+type SignUpProps = {
+    name: string;
+    email: string;
+    password: string;
+};
+
 export const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -37,7 +44,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     })
     const [loadingAuth, setLoadingAuth] = useState(false)
     const [loading, setLoading] = useState(true)
-
 
     const isAuthenticated = !!user.name;
 
@@ -94,6 +100,40 @@ export function AuthProvider({ children }: AuthProviderProps) {
         } catch (error) {
             console.log('erro ao acessar', error);
             setLoadingAuth(false);
+            alert("Credenciais incorretas, tente novamente")
+        }
+    }
+
+    async function signUp({ name, email, password }: SignUpProps) {
+        setLoadingAuth(true);
+
+        try {
+            const response = await api.post('/users', {
+                name,
+                email,
+                password,
+            });
+
+            const { id, token } = response.data;
+
+            const user = {
+                id,
+                name,
+                email,
+                token,
+            };
+
+            await AsyncStorage.setItem('@diceroll', JSON.stringify(user));
+
+            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+            setUser(user);
+
+            setLoadingAuth(false);
+        } catch (error) {
+            console.log('Erro ao registrar', error);
+            setLoadingAuth(false);
+            alert('Erro ao registrar usuário. Por favor, tente novamente.');
         }
     }
 
@@ -110,8 +150,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, signIn, loading, loadingAuth, signOut }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, signIn, loading, loadingAuth, signOut, signUp }}>
             {children}
         </AuthContext.Provider>
+
     )
 }
