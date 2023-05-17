@@ -40,10 +40,10 @@ export default function SingUp() {
             />
             <View style={styles.inputContainer}>
                 <Text style={styles.title}>Inscreva-se</Text>
-                <Text style={styles.subTitle}>Preencha as informações para criar uma conta e inscreva-se para continuar</Text>
+                <Text style={styles.subTitle}>Preencha as informações para criar uma conta e registrar-se para continuar</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Usuário"
+                    placeholder="Nome de usuário"
                     value={name}
                     onChangeText={(text) => setUser(text)}
                 />
@@ -52,6 +52,8 @@ export default function SingUp() {
                     placeholder="Email"
                     value={email}
                     onChangeText={(text) => setEmail(text)}
+                    autoCapitalize="none"
+                    keyboardType="email-address"
                 />
                 <View style={styles.inputPassword}>
                     <TextInput

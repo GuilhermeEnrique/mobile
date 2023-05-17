@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ImageBackground, StatusBar, Image, TouchableOpa
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParmsList } from "../../routers/auth.routes";
+import { FontAwesome } from "@expo/vector-icons";
 
 export default function Home() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
@@ -18,7 +19,8 @@ export default function Home() {
     return (
         <ImageBackground
             style={styles.backgroundImage}
-            source={require('../../assets/Background.png')}
+            source={require('../../assets/Background.png')
+            }
         >
             <StatusBar backgroundColor="transparent" translucent={true} />
             <View style={styles.container}>
@@ -39,11 +41,14 @@ export default function Home() {
                     <Image
                         style={styles.logo}
                         source={require('../../assets/Logo.png')} />
+                    <View style={styles.copyright}>
+                        <FontAwesome name="copyright" size={20} color="black" />
+                        <Text style={styles.textCopyright}>Dice-roll 2023</Text>
+                    </View>
+
                 </View>
             </View>
-        </ImageBackground>
-
-
+        </ImageBackground >
     )
 }
 
@@ -58,6 +63,7 @@ const styles = StyleSheet.create({
     backgroundImage: {
         flex: 1,
         resizeMode: 'cover',
+        position: 'relative',
     },
     logo: {
         width: 150,
@@ -74,15 +80,15 @@ const styles = StyleSheet.create({
     title1: {
         color: '#000',
         fontWeight: 'bold',
-        fontSize: 53
+        fontSize: 80
     },
     title2: {
         color: '#27B89B',
         fontWeight: 'bold',
-        fontSize: 53
+        fontSize: 80
     },
     subTitle: {
-        fontSize: 25,
+        fontSize: 30,
         fontWeight: '600',
         textAlign: 'left'
     },
@@ -122,5 +128,16 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 17,
         fontWeight: '600'
+    },
+    copyright: {
+        justifyContent: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    textCopyright: {
+        color: '#000',
+        fontSize: 17,
+        fontWeight: '600',
+        marginLeft: 5
     }
 })

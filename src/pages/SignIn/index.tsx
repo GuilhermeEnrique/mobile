@@ -47,6 +47,8 @@ export default function SignIn() {
                     placeholder="Email"
                     value={email}
                     onChangeText={(text) => setEmail(text)}
+                    autoCapitalize="none"
+                    keyboardType="email-address"
                 />
                 <View style={styles.inputPassword}>
                     <TextInput
@@ -88,8 +90,9 @@ const styles = StyleSheet.create({
     },
     logo: {
         marginTop: 100,
-        width: 100,
-        height: 100
+        width: 120,
+        height: 120,
+        marginBottom: 50
     },
     title: {
         fontSize: 32,
