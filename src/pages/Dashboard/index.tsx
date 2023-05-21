@@ -9,7 +9,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export default function Dashboard() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
-    const { signOut } = useContext(AuthContext);
+    const { user, signOut } = useContext(AuthContext);
 
     async function Campanhas() {
         navigation.navigate('Campanhas');
@@ -28,17 +28,29 @@ export default function Dashboard() {
     }
     return (
         <SafeAreaView style={styles.container}>
-            <TouchableOpacity style={styles.buttonProfile} onPress={Profile}>
+            <View style={styles.buttonProfile}>
                 <Image
                     style={styles.imagem}
                     source={require('../../assets/usuario.png')}
                 />
                 <View style={styles.containerProfile} >
-                    <Text style={styles.text}>Olá, usuario</Text>
-                    <FontAwesome name="edit" size={24} style={styles.icon} />
-                    <Text style={styles.textEdit}>Editar Perfil</Text>
+                    <Text style={styles.text}>Olá, {user.name.charAt(0).toUpperCase() + user.name.slice(1)}</Text>
+                    <View style={styles.buttonsProfile}>
+                        <TouchableOpacity
+                            onPress={Profile}
+                            style={styles.EditProfile}>
+                            <FontAwesome name="edit" size={24} style={styles.icon} />
+                            <Text style={styles.textEdit}>Editar Perfil</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.EditProfile}
+                            onPress={signOut}>
+                            <FontAwesome name="sign-out" size={24} style={styles.icon} />
+                            <Text style={styles.textEdit}>Sair da conta</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </TouchableOpacity>
+            </View>
             <TouchableOpacity style={styles.buttons} onPress={Campanhas}>
                 <Image
                     style={styles.imagemButtons}
@@ -60,13 +72,6 @@ export default function Dashboard() {
                 />
                 <Text style={styles.textButtons}>Dados</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={signOut}>
-                <FontAwesome name="sign-out" size={20} color='#F8FAFF' />
-                <Text style={styles.textSignOut}>Sair da conta</Text>
-            </TouchableOpacity>
-
         </SafeAreaView>
     )
 }
@@ -78,24 +83,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: '#F8FAFF',
     },
-    //Botão de saída
-    button: {
-        backgroundColor: '#000',
-        marginBottom: 30,
-        height: 50,
-        borderRadius: 20,
-        padding: 15,
-        alignContent: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row'
-    },
-    textSignOut: {
-        color: '#F8FAFF',
-        fontSize: 15,
-        marginLeft: 10
-    },
 
-    //Butão de perfil
+
+    //Botão de perfil
     containerProfile: {
         flexDirection: 'column',
         alignItems: 'center',
@@ -130,11 +120,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
 
         shadowColor: '#000',
-        shadowOpacity: 0.5,
-        shadowRadius: 5,
+        shadowOpacity: 0,
+        shadowRadius: 0,
         shadowOffset: {
-            width: 0,
-            height: 2,
+            width: 10,
+            height: 10,
         },
         elevation: 5,
     },
@@ -143,7 +133,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 8,
         borderRadius: 100,
-        marginTop: 10
+        marginTop: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     textEdit: {
         fontSize: 12,
@@ -152,6 +144,17 @@ const styles = StyleSheet.create({
         textShadowColor: '#000',
         textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 10,
+    },
+    buttonsProfile: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    EditProfile: {
+        margin: 5,
+        padding: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
     //Botões da pagina
@@ -162,7 +165,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         borderWidth: 1,
         borderColor: '#000',
-
     },
     buttons: {
         flex: 1,
@@ -173,15 +175,6 @@ const styles = StyleSheet.create({
         width: '80%',
         borderRadius: 20,
         marginBottom: 15,
-
-        shadowColor: '#000',
-        shadowOpacity: 0.5,
-        shadowRadius: 5,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        elevation: 5,
     },
     textButtons: {
         color: 'white',
@@ -193,5 +186,4 @@ const styles = StyleSheet.create({
         textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 10,
     }
-
 })

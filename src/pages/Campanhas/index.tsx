@@ -5,49 +5,11 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FontAwesome } from '@expo/vector-icons'
 import { StackParmsList } from '../../routers/app.routes';
 
-type CampanhaProps = {
-    id: string;
-    title: string;
-    description: string;
-    banner: string;
-};
-
-interface CampanhasProps {
-    campanhas: CampanhaProps[];
-}
-
-export type CampanhaItemProps = {
-    id: string;
-    title: string;
-    description: string;
-    banner: string;
-    characters: {
-        map(arg0: (character: any) => JSX.Element): React.ReactNode;
-        id: string;
-        name: string;
-    };
-};
-
-export default function Campanhas({ campanhas }: CampanhasProps) {
+export default function Campanhas() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
-    const [campanhaList, setCampanhaList] = useState(campanhas || []);
-    const [modalItem, setModalItem] = useState<CampanhaItemProps | undefined>();
-    const [modalVisible, setModalVisible] = useState(false);
-    const [refreshing, setRefreshing] = useState(false);
 
     async function Campanhas() {
         navigation.navigate('CreateCampanhas');
-    }
-
-    async function handleOpenModalView(id: string) {
-        // Lógica para obter os dados da campanha com base no ID
-        // setModalItem(response.data);
-        setModalVisible(true);
-    }
-    async function handleRefresh() {
-        setRefreshing(true);
-        // Lógica de atualização dos dados
-        setRefreshing(false);
     }
     return (
         <View style={styles.container}>
@@ -55,33 +17,12 @@ export default function Campanhas({ campanhas }: CampanhasProps) {
                 <Text style={styles.titleText}>Suas campanhas</Text>
                 <TouchableOpacity
                     style={styles.refreshButton}
-                    onPress={handleRefresh}
-                    disabled={refreshing}
                 >
-                    {refreshing ? (
-                        <Text style={styles.refreshButtonText}>Atualizando...</Text>
-                    ) : (
-                        <FontAwesome name="refresh" size={24} color="black" />
-                    )}
                 </TouchableOpacity>
             </View>
             <View style={styles.campanhas}>
-                {campanhaList.length === 0 && (
-                    <Text style={styles.emptyList}>Nenhuma campanha foi encontrada...</Text>
-                )}
-                <View style={styles.listCampanhas}>
-                    {campanhaList.map((item) => (
-                        <TouchableOpacity
-                            key={item.id}
-                            style={styles.selectCampanha}
-                            onPress={() => handleOpenModalView(item.id)}
-                        >
-                            <Text>{item.title}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
+                <Text style={styles.emptyList}>Nenhuma campanha foi encontrada...</Text>
             </View>
-
             <TouchableOpacity style={styles.buttonNewCampanha} onPress={Campanhas}>
                 <FontAwesome name="plus-circle" size={24} style={styles.IconNewCampanha} />
                 <Text style={styles.TitleNewCampanha}>Criar uma nova Campanha</Text>

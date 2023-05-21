@@ -32,8 +32,8 @@ export default function CreateCampanhas() {
 
         // console.log(result);
 
-        if (!result.cancelled) {
-            setAvatarUrl(result.assets[0].uri);
+        if (!result.cancelled && result.uri) {
+            setAvatarUrl(result.uri);
         }
     };
 
