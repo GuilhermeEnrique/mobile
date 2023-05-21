@@ -16,7 +16,7 @@ export default function Dashboard() {
     }
 
     async function Personagens() {
-        navigation.navigate('CreatePersonagem');
+        navigation.navigate('Personagens');
     }
 
     async function Dados() {
@@ -83,8 +83,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: '#F8FAFF',
     },
-
-
     //Botão de perfil
     containerProfile: {
         flexDirection: 'column',
@@ -156,7 +154,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
     //Botões da pagina
     imagemButtons: {
         width: '100%',
@@ -171,7 +168,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'transparent',
-        height: 1900,
+        height: 190,
         width: '80%',
         borderRadius: 20,
         marginBottom: 15,

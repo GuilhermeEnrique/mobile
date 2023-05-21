@@ -4,22 +4,19 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Dashboard from '../pages/Dashboard';
 import Campanhas from '../pages/Campanhas';
 import CreateCampanhas from '../pages/CreateCampanha';
-import CreatePersonagem from '../pages/Personagens'
-import Dice from '../pages/Dice'
-import Profile from '../pages/Profile'
+import CreatePersonagens from '../pages/CreatePersonagem';
+import Personagens from '../pages/Personagens';
+import Dice from '../pages/Dice';
+import Profile from '../pages/Profile';
 
 export type StackParmsList = {
     Dashboard: undefined;
     Campanhas: undefined;
     CreateCampanhas: undefined;
+    Personagens: undefined;
     CreatePersonagem: undefined;
     Dice: undefined;
-    Profile: undefined
-    // {
-    //     name: string;
-    //     id: string;
-    //     email: string;
-    // }
+    Profile: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParmsList>();
@@ -43,8 +40,13 @@ function AppRoutes() {
                 options={{ headerShown: false }}
             />
             <Stack.Screen
+                name="Personagens"
+                component={Personagens}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
                 name="CreatePersonagem"
-                component={CreatePersonagem}
+                component={CreatePersonagens}
                 options={{ headerShown: false }}
             />
             <Stack.Screen
