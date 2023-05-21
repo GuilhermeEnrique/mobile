@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     buttonEye: {
         justifyContent: 'center',
         backgroundColor: '#EDE8E8',
-        marginLeft: 10,
+        marginLeft: 5,
         height: 50,
         padding: 14,
         borderRadius: 10
@@ -132,8 +132,7 @@ const styles = StyleSheet.create({
         height: 50,
         padding: 16,
         borderRadius: 10,
-        marginVertical: 5,
-        marginBottom: 10
+        marginBottom: 5
     },
     inputContainer: {
         marginBottom: 300,

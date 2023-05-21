@@ -108,7 +108,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setLoadingAuth(true);
 
         try {
-            const response = await api.post('/users', {
+            const response = await api.post('/create-user', {
                 name,
                 email,
                 password,

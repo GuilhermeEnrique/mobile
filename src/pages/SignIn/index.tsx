@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     buttonEye: {
         justifyContent: 'center',
         backgroundColor: '#EDE8E8',
-        marginLeft: 10,
+        marginLeft: 5,
         height: 50,
         padding: 14,
         borderRadius: 10
