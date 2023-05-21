@@ -5,6 +5,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParmsList } from '../../routers/app.routes';
+import RNPickerSelect from 'react-native-picker-select';
+import { api } from '../../services/api';
 
 
 //npm install react-native-image-picker
@@ -44,16 +46,27 @@ export default function CreateCampanhas() {
     };
 
     async function openPersonagem() {
-        if (name === '' || description === '' || avatarUrl === '') {
+        if (name === '' || description === '' || avatarUrl === '' || race === '' || life === '' || level === '' || campanhasId === '' || userId === '') {
+            alert('Preencha todos os campos!');
             return
+        }
+
+        try {
+            const response = await api.post('/create-personagem', {
+               
+            });
+
+        
+        } catch (error) {
+            console.log('Erro ao rolar dados:', error);
         }
     }
 
     return (
-        <ScrollView>
-            <View style={styles.container}>
+        <ScrollView style={styles.container}>
+            <View style={styles.containerCenter}>
                 <Text style={styles.title}>
-                    Criar uum personagem
+                    Criar um personagem
                 </Text>
                 <View style={styles.Inputs}>
                     <TouchableOpacity style={styles.avatarButton} onPress={pickImage}>
@@ -69,15 +82,16 @@ export default function CreateCampanhas() {
                             style={styles.InputL}
                             value={life}
                             onChangeText={(text) => setLife(text)}
+                            keyboardType='numeric'
                         />
                         <TextInput
                             placeholder='Nível'
-                            style={styles.InputL}
+                            style={styles.InputLevel}
                             value={level}
                             onChangeText={(text) => setLevel(text)}
+                            keyboardType='numeric'
                         />
                     </View>
-
                     <TextInput
                         placeholder='Nome do personagem'
                         style={styles.Input}
@@ -93,8 +107,34 @@ export default function CreateCampanhas() {
                         value={description}
                         onChangeText={(text) => setDescription(text)}
                     />
-
-
+                    <TextInput
+                        placeholder='Raça'
+                        style={styles.Input}
+                        value={race}
+                        onChangeText={(text) => setRace(text)}
+                    />
+                    <TextInput
+                        placeholder='Classe'
+                        style={styles.Input}
+                        value={classe}
+                        onChangeText={(text) => setClasse(text)}
+                    />
+                    <RNPickerSelect
+                        value={campanhasId}
+                        onValueChange={(value) => setCampanha(value)}
+                        items={[
+                            { label: 'O Retorno do rei', value: '1' },
+                        ]}
+                        placeholder={{ label: 'Escolha uma campanha', value: null }}
+                    />
+                    <RNPickerSelect
+                        value={userId}
+                        onValueChange={(value) => setUser(value)}
+                        items={[
+                            { label: 'Teste', value: '1' },
+                        ]}
+                        placeholder={{ label: 'Esse personagem pertencer a', value: null }}
+                    />
 
                 </View>
 
@@ -102,26 +142,31 @@ export default function CreateCampanhas() {
                     <TouchableOpacity style={styles.buttonSalvar} onPress={openPersonagem}>
                         <Text style={styles.textSalvar}>Salvar</Text>
                     </TouchableOpacity>
-
                     <TouchableOpacity style={styles.buttonCancelar} onPress={Personagens}>
                         <Text style={styles.textCancelar}>Cancelar</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         </ScrollView>
+
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        // alignItems: 'center',
+        // justifyContent: 'space-between',
         backgroundColor: '#F8FAFF'
+    },
+    containerCenter: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
     title: {
         fontSize: 20,
-        marginTop: 5,
+        margin: 20,
         fontWeight: 'bold',
         color: '#000',
     },
@@ -171,13 +216,23 @@ const styles = StyleSheet.create({
     InputL: {
         backgroundColor: '#EDE8E8',
         padding: 13,
-        width: '50%',
+        width: '48%',
         height: 47,
         marginBottom: 10,
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#646262',
-        marginLeft: 5,
+    },
+    InputLevel: {
+        backgroundColor: '#EDE8E8',
+        padding: 13,
+        width: '49%',
+        height: 47,
+        marginBottom: 10,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#646262',
+        marginLeft: 10,
     }
     ,
     buttons: {
