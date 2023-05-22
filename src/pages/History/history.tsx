@@ -14,8 +14,6 @@ function getIconName(type: string): string {
             return 'dice-d12';
         case '20':
             return 'dice-d20';
-        case '100':
-            return 'dice-multiple';
         default:
             return 'dice-1';
     }

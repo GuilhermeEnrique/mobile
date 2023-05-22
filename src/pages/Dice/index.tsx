@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, ScrollView, Alert } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { api } from '../../services/api';
 import History from '../History/history';
 
@@ -36,21 +36,15 @@ export default function Dados() {
                 type,
                 quantity
             });
-
             const { data } = response;
             console.log(data)
             setResults(data.result);
             setTotal(data.sum);
-
             // Adicione a rolagem atual ao histórico
             setHistory([...history, { type, result: data.result, sum: data.sum }]);
-
-
             // Limpa os campos de quantidade e tipo
             setType('');
             setQuantity('');
-
-
         } catch (error) {
             console.log('Erro ao rolar dados:', error);
         }
@@ -77,7 +71,6 @@ export default function Dados() {
                         { label: 'D12 (12 lados)', value: '12' },
                         { label: 'D12 (12 lados)', value: '12' },
                         { label: 'D20 (20 lados) ', value: '20' },
-                        { label: 'D100 (100 lados) ', value: '100' },
                     ]}
                     placeholder={{ label: 'Escolha um tipo de dado', value: null }}
                 />
@@ -90,7 +83,7 @@ export default function Dados() {
                 />
                 <ScrollView style={styles.scrollView}>
                     {results.length > 0 ? (
-                        <View style={styles.ResultadosDados}>
+                        <View style={styles.ResultadosDados}>   
                             {results.map((result, index) => (
                                 <Text key={index}>Dado de número {index + 1} = {result}</Text>
                             ))}
@@ -98,6 +91,7 @@ export default function Dados() {
                         </View>
                     ) : null}
                 </ScrollView>
+
                 <TouchableOpacity style={styles.ButtonDados} onPress={handleDice}>
                     <Text style={styles.textDados}>
                         <View style={styles.buttonContent}>
