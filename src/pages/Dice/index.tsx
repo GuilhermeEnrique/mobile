@@ -13,7 +13,7 @@ export default function Dados() {
     const [results, setResults] = useState([]);
     const [total, setTotal] = useState(0);
 
-    const [history, setHistory] = useState<number[][]>([]);
+    const [history, setHistory] = useState<{ type: string; result: any[]; sum: number }[]>([]);
     const [showHistory, setShowHistory] = useState(false);
 
     async function handleDice() {
@@ -43,7 +43,8 @@ export default function Dados() {
             setTotal(data.sum);
 
             // Adicione a rolagem atual ao histórico
-            setHistory([...history, data.result]);
+            setHistory([...history, { type, result: data.result, sum: data.sum }]);
+
 
             // Limpa os campos de quantidade e tipo
             setType('');
@@ -199,6 +200,5 @@ const styles = StyleSheet.create({
         padding: 13,
         width: '100%',
     },
-
 })
 
