@@ -29,7 +29,7 @@ const History = ({ history }) => {
                     <MaterialCommunityIcons name={getIconName(roll.type)} size={20} color="black" />
                     <Text>Rolagem {index + 1}:</Text>
                     {roll.result.map((result, i) => (
-                        <Text key={i}>Dado de número {i + 1} = {result}</Text>
+                        <Text key={i}>Dado {i + 1} = {result}</Text>
                     ))}
                     <Text>Soma dos resultados: {roll.sum}</Text>
                 </View>
