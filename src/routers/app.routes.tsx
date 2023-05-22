@@ -8,6 +8,7 @@ import CreatePersonagens from '../pages/CreatePersonagem';
 import Personagens from '../pages/Personagens';
 import Dice from '../pages/Dice';
 import Profile from '../pages/Profile';
+import Guia from '../pages/Guia';
 
 export type StackParmsList = {
     Dashboard: undefined;
@@ -17,6 +18,7 @@ export type StackParmsList = {
     CreatePersonagem: undefined;
     Dice: undefined;
     Profile: undefined;
+    Guia: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParmsList>();
@@ -57,6 +59,11 @@ function AppRoutes() {
             <Stack.Screen
                 name="Profile"
                 component={Profile}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="Guia"
+                component={Guia}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

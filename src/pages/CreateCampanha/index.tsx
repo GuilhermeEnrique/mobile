@@ -1,22 +1,24 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParmsList } from '../../routers/app.routes';
+import { api } from '../../services/api';
+import axios from 'axios';
 
-
-//npm install react-native-image-picker
-// Link a biblioteca executando o seguinte comando no terminal:
-//npx react-native link react-native-image-picker
-
+type CreateCampaignProps = {
+    title: string;
+    description: string;
+    image: string;
+}
 
 export default function CreateCampanhas() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [avatarUrl, setAvatarUrl] = useState('');
+    const [image, setImage] = useState('');
 
     async function CreateCampanhas() {
         navigation.navigate('Campanhas');
@@ -30,18 +32,12 @@ export default function CreateCampanhas() {
             quality: 1,
         });
 
-        // console.log(result);
-
         if (!result.cancelled && result.uri) {
-            setAvatarUrl(result.uri);
+            setImage(result.uri);
         }
-    };
 
-    async function openCampanha() {
-        if (title === '' || description === '' || avatarUrl === '') {
-            return
-        }
-    }
+        console.log(result)
+    };
 
     return (
         <View style={styles.container}>
@@ -50,10 +46,13 @@ export default function CreateCampanhas() {
             </Text>
             <View style={styles.Inputs}>
                 <TouchableOpacity style={styles.avatarButton} onPress={pickImage}>
-                    {avatarUrl ? (
-                        <Image source={{ uri: avatarUrl }} style={styles.preview} />
+                    {image ? (
+                        <Image source={{ uri: image }} style={styles.preview} />
                     ) : (
-                        <><FontAwesome name="camera" size={24} color="black" /><Text>Selecionar avatar</Text></>
+                        <>
+                            <FontAwesome name="camera" size={24} color="black" />
+                            <Text>Selecionar avatar</Text>
+                        </>
                     )}
                 </TouchableOpacity>
                 <TextInput
@@ -75,7 +74,7 @@ export default function CreateCampanhas() {
             </View>
 
             <View style={styles.buttons}>
-                <TouchableOpacity style={styles.buttonSalvar} onPress={openCampanha}>
+                <TouchableOpacity style={styles.buttonSalvar}>
                     <Text style={styles.textSalvar}>Salvar</Text>
                 </TouchableOpacity>
 

@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from "react-native"
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, ScrollView } from "react-native"
 import { FontAwesome } from '@expo/vector-icons';
 import { StackParmsList } from "../../routers/app.routes";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -26,53 +26,66 @@ export default function Dashboard() {
         navigation.navigate('Profile');
         // {id: '213', name: 'Dice', email: 'dice@gmail.com'}
     }
+    async function Guia() {
+        navigation.navigate('Guia')
+    }
+
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.buttonProfile}>
-                <Image
-                    style={styles.imagem}
-                    source={require('../../assets/usuario.png')}
-                />
-                <View style={styles.containerProfile} >
-                    <Text style={styles.text}>Olá, {user.name.charAt(0).toUpperCase() + user.name.slice(1)}</Text>
-                    <View style={styles.buttonsProfile}>
-                        <TouchableOpacity
-                            onPress={Profile}
-                            style={styles.EditProfile}>
-                            <FontAwesome name="edit" size={24} style={styles.icon} />
-                            <Text style={styles.textEdit}>Editar Perfil</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.EditProfile}
-                            onPress={signOut}>
-                            <FontAwesome name="sign-out" size={24} style={styles.icon} />
-                            <Text style={styles.textEdit}>Sair da conta</Text>
-                        </TouchableOpacity>
+        <ScrollView >
+            <View style={styles.container}>
+                <View style={styles.buttonProfile}>
+                    <Image
+                        style={styles.imagem}
+                        source={require('../../assets/usuario.png')}
+                    />
+                    <View style={styles.containerProfile} >
+                        <Text style={styles.text}>Olá, {user.name.charAt(0).toUpperCase() + user.name.slice(1)}</Text>
+                        <View style={styles.buttonsProfile}>
+                            <TouchableOpacity
+                                onPress={Profile}
+                                style={styles.EditProfile}>
+                                <FontAwesome name="edit" size={24} style={styles.icon} />
+                                <Text style={styles.textEdit}>Editar Perfil</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.EditProfile}
+                                onPress={signOut}>
+                                <FontAwesome name="sign-out" size={24} style={styles.icon} />
+                                <Text style={styles.textEdit}>Sair da conta</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
+                <TouchableOpacity style={styles.buttons} onPress={Campanhas}>
+                    <Image
+                        style={styles.imagemButtons}
+                        source={require('../../assets/mapa.png')}
+                    />
+                    <Text style={styles.textButtons}>Campanha</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttons} onPress={Personagens}>
+                    <Image
+                        style={styles.imagemButtons}
+                        source={require('../../assets/personagem.png')}
+                    />
+                    <Text style={styles.textButtons}>Ficha de personagem</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttons} onPress={Dados}>
+                    <Image
+                        style={styles.imagemButtons}
+                        source={require('../../assets/dados.png')}
+                    />
+                    <Text style={styles.textButtons}>Dados</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttons} onPress={Guia}>
+                    <Image
+                        style={styles.imagemButtons}
+                        source={require('../../assets/guia.png')}
+                    />
+                    <Text style={styles.textButtons}>Guia de usuário</Text>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.buttons} onPress={Campanhas}>
-                <Image
-                    style={styles.imagemButtons}
-                    source={require('../../assets/mapa.png')}
-                />
-                <Text style={styles.textButtons}>Campanha</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttons} onPress={Personagens}>
-                <Image
-                    style={styles.imagemButtons}
-                    source={require('../../assets/personagem.png')}
-                />
-                <Text style={styles.textButtons}>Ficha de personagem</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttons} onPress={Dados}>
-                <Image
-                    style={styles.imagemButtons}
-                    source={require('../../assets/dados.png')}
-                />
-                <Text style={styles.textButtons}>Dados</Text>
-            </TouchableOpacity>
-        </SafeAreaView>
+        </ScrollView>
     )
 }
 
