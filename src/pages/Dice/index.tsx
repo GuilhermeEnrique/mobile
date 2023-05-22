@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, ScrollView, Alert } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { api } from '../../services/api';
+import History from '../History/history';
+
 
 export default function Dados() {
     const [type, setType] = useState('')
@@ -11,13 +13,23 @@ export default function Dados() {
     const [results, setResults] = useState([]);
     const [total, setTotal] = useState(0);
 
-    const [history, setHistory] = useState([]);
+    const [history, setHistory] = useState<number[][]>([]);
+    const [showHistory, setShowHistory] = useState(false);
 
     async function handleDice() {
         if (type === '' || quantity === '') {
-            alert('Selecione um dado e a quantidade!')
+            Alert.alert('Atenção', 'Selecione um dado e a quantidade!')
             return
         }
+
+        if (parseInt(quantity) > 100) {
+            Alert.alert(
+                'Limite de quantidade excedido',
+                'A quantidade máxima permitida é 100.',
+            );
+            return;
+        }
+
 
         try {
             const response = await api.post('/roll', {
@@ -30,9 +42,14 @@ export default function Dados() {
             setResults(data.result);
             setTotal(data.sum);
 
+            // Adicione a rolagem atual ao histórico
+            setHistory([...history, data.result]);
+
             // Limpa os campos de quantidade e tipo
             setType('');
             setQuantity('');
+
+
         } catch (error) {
             console.log('Erro ao rolar dados:', error);
         }
@@ -89,7 +106,7 @@ export default function Dados() {
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.ButtonDados}>
+                <TouchableOpacity style={styles.ButtonDados} onPress={() => setShowHistory(!showHistory)}>
                     <Text style={styles.textDados}>
                         <View style={styles.buttonContent}>
                             <FontAwesome5 name="history" size={24} color="#F8FAFF" />
@@ -97,8 +114,12 @@ export default function Dados() {
                         </View>
                     </Text>
                 </TouchableOpacity>
+
+                {showHistory && <History history={history} />}
             </View>
         </View>
+
+
     )
 }
 
@@ -159,15 +180,15 @@ const styles = StyleSheet.create({
     },
     image: {
         alignSelf: 'center',
-        width: 200,
-        height: 200,
+        width: 150,
+        height: 150,
         marginTop: 20,
     },
     scrollView: {
         flex: 1,
         width: '100%',
         borderWidth: 1,
-        minHeight: 120,
+        minHeight: 100,
         marginBottom: 10,
         borderRadius: 10,
         borderColor: '#646262',
