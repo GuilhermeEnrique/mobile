@@ -129,7 +129,6 @@ const styles = StyleSheet.create({
         borderColor: 'dark',
         backgroundColor: '#EDE8E8',
         borderWidth: 1,
-
         shadowColor: '#000',
         shadowOpacity: 0,
         shadowRadius: 0,
@@ -170,7 +169,7 @@ const styles = StyleSheet.create({
     //Botões da pagina
     imagemButtons: {
         width: '100%',
-        height: 190,
+        height: 160,
         position: 'absolute',
         borderRadius: 20,
         borderWidth: 1,
@@ -181,19 +180,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'transparent',
-        height: 190,
+        height: 160,
         width: '80%',
         borderRadius: 20,
-        marginBottom: 15,
+        marginBottom: 10,
     },
     textButtons: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: 25,
         textAlign: 'center',
         zIndex: 1,
         textShadowColor: '#000',
-        textShadowOffset: { width: 1, height: 1 },
+        textShadowOffset: { width: 2, height: 2 },
         textShadowRadius: 10,
     }
 })

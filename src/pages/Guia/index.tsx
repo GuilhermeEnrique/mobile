@@ -1,46 +1,77 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Linking } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FontAwesome } from '@expo/vector-icons'
 import { StackParmsList } from '../../routers/app.routes';
 
+type BookType = 'livroJogador' | 'manualMonstros' | 'guiaMestre';
+
 export default function Campanhas() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
 
-    async function Campanhas() {
-        navigation.navigate('CreateCampanhas');
+    function handleDownloadPDF(bookType: BookType) {
+        let pdfUrl = '';
+
+        switch (bookType) {
+            case 'livroJogador':
+                pdfUrl = 'https://github.com/bibliotecaelfica/bibliotecaelfica.github.io/files/3611502/D.D.5E.-.Livro.do.Jogador.Fundo.Colorido.pdf';
+                break;
+            case 'manualMonstros':
+                pdfUrl = 'https://github.com/bibliotecaelfica/bibliotecaelfica.github.io/files/3611503/D.D.5E.-.Manual.dos.Monstros.pdf';
+                break;
+            case 'guiaMestre':
+                pdfUrl = 'https://github.com/bibliotecaelfica/bibliotecaelfica.github.io/files/3611504/D.D.5E.-.Guia.do.Mestre.pdf';
+                break;
+            default:
+                break;
+        }
+
+        Linking.openURL(pdfUrl);
     }
+
     return (
-        <View style={styles.container}>
-            <View style={styles.title}>
-                <Text style={styles.titleText}>Guia de usuário</Text>
+        <ScrollView>
+            <View style={styles.container}>
+                <View style={styles.title}>
+                    <Text style={styles.titleText}>Guia de usuário</Text>
+                    <Text style={styles.subTitleText}>Aqui você pode baixar os guias que vão te auxiliar no seu jogo de D&D 5E, incluindo as versões mais recentes dos livros-guia.</Text>
+                </View>
+
+                <View>
+                    <Image
+                        style={styles.imagemButtons}
+                        source={require('../../assets/livroJogador.jpg')}
+                    />
+                    <TouchableOpacity style={styles.buttons} onPress={() => handleDownloadPDF('livroJogador')}>
+                        <FontAwesome name="download" size={24} color="blue" />
+                        <Text style={styles.textButtons}>Baixar Livro do jogador</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View>
+                    <Image
+                        style={styles.imagemButtons}
+                        source={require('../../assets/manualMonstros.jpg')}
+                    />
+                    <TouchableOpacity style={styles.buttons} onPress={() => handleDownloadPDF('manualMonstros')}>
+                        <FontAwesome name="download" size={24} color="blue" />
+                        <Text style={styles.textButtons}>Baixar Manual dos monstros</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <Image
+                        style={styles.imagemButtons}
+                        source={require('../../assets/guiaMestre.jpg')}
+                    />
+                    <TouchableOpacity style={styles.buttons} onPress={() => handleDownloadPDF('guiaMestre')}>
+                        <FontAwesome name="download" size={24} color="blue" />
+                        <Text style={styles.textButtons}>Baixar Guia do mestre</Text>
+                    </TouchableOpacity>
+                </View>
+
             </View>
-
-            <TouchableOpacity style={styles.buttons}>
-                <Image
-                    style={styles.imagemButtons}
-                    source={require('../../assets/livroJogador.jpg')}
-                />
-                <Text style={styles.textButtons}>Livro do jogador</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.buttons}>
-                <Image
-                    style={styles.imagemButtons}
-                    source={require('../../assets/manualMonstros.jpg')}
-                />
-                <Text style={styles.textButtons}>Manual dos monstros</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.buttons}>
-                <Image
-                    style={styles.imagemButtons}
-                    source={require('../../assets/guiaMestre.jpg')}
-                />
-                <Text style={styles.textButtons}>Guia do mestre</Text>
-            </TouchableOpacity>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -52,42 +83,40 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8FAFF'
     },
     title: {
-        alignContent: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row'
+        alignItems: 'center',
+        flexDirection: 'column',
+        margin: 20
     },
     titleText: {
         marginRight: 15,
-        fontSize: 20,
+        fontSize: 25,
         marginTop: 5,
         fontWeight: 'bold',
         color: '#000',
-    }, buttons: {
-        flex: 1,
-        alignItems: 'center',
+    },
+    subTitleText: {
+        marginRight: 15,
+        fontSize: 18,
+        marginTop: 5,
+        fontWeight: '500',
+        color: '#000',
+        textAlign: 'justify'
+    },
+    buttons: {
+        margin: 10,
+        alignContent: 'center',
         justifyContent: 'center',
-        backgroundColor: 'transparent',
-        height: 190,
-        width: '80%',
-        borderRadius: 20,
-        marginBottom: 15,
+        flexDirection: 'row',
     },
     textButtons: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 20,
-        textAlign: 'center',
-        zIndex: 1,
-        textShadowColor: '#000',
-        textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 10,
+        color: 'blue',
+        marginLeft: 10,
     },
     imagemButtons: {
-        width: '100%',
-        height: 190,
-        position: 'absolute',
-        borderRadius: 20,
+        borderRadius: 30,
         borderWidth: 1,
         borderColor: '#000',
+        margin: 10,
+        alignSelf: 'center',
     },
 })
