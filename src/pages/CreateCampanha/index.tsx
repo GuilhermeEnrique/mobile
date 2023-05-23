@@ -85,8 +85,8 @@ export default function CreateCampanhas() {
 
         </View>
     )
-}
 
+}
 const styles = StyleSheet.create({
     container: {
         flex: 1,
