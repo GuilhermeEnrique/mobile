@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { api } from '../../services/api';
 import { FontAwesome } from '@expo/vector-icons';
-
+import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
 interface UserData {
     id: string;
     name: string;
@@ -15,7 +16,7 @@ export default function Profile() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [biografia, setBiografia] = useState('');
-    const [profileImage, setProfileImage] = useState('');
+    const [profileImage, setProfileImage] = useState<string | null>('');
     const [isEditing, setIsEditing] = useState(false);
     const [isCanceling, setIsCanceling] = useState(false);
     const [userData, setUserData] = useState<UserData | null>(null);
@@ -23,6 +24,7 @@ export default function Profile() {
     useEffect(() => {
         fetchUserData();
         fetchProfileImage();
+        fetchPermissions();
     }, []);
 
     const fetchUserData = async () => {
@@ -45,10 +47,17 @@ export default function Profile() {
         try {
             const response = await api.get('/profile/image');
             const imageFileName = response.data.imageFileName;
-            const imageURL = `http://192.168.100.74:3333/uploads/${imageFileName}`;
+            const imageURL = `http://192.168.0.32:3333/uploads/${imageFileName}`;
             setProfileImage(imageURL);
         } catch (error) {
             console.log(error);
+        }
+    };
+
+    const fetchPermissions = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            alert('A permissão para acessar a biblioteca de mídia é necessária!');
         }
     };
 
@@ -63,6 +72,50 @@ export default function Profile() {
             setIsEditing(false);
         } catch (error) {
             console.log(error);
+        }
+    };
+
+    const handleChooseImage = async () => {
+        const pickerResult = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 4],
+            quality: 1,
+        });
+
+        if (pickerResult.canceled === true) {
+            return;
+        }
+
+        const selectedAsset = pickerResult.assets[0];
+        const uri = selectedAsset.uri;
+        console.log(uri)
+        // Atualize o estado da imagem com a URI selecionada
+        setProfileImage(uri);
+
+        const filename = pickerResult.assets[0].uri.substring(pickerResult.assets[0].uri.lastIndexOf('/') + 1, pickerResult.assets[0].uri.length);
+
+        const extend = filename.split('.')[1];
+
+        const formData = new FormData();
+        formData.append('file', JSON.parse(JSON.stringify({
+            name: filename,
+            uri: pickerResult.assets[0].uri,
+            type: 'image/' + extend,
+        })));
+
+        try {
+            const response = await api.put(`http://192.168.0.32:3333/update-user:${id}`, formData, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            if (response.data.error) {
+                Alert.alert('Error', 'Não foi possível enviar sua imagem. Por favor, tente novamente mais tarde')
+            }
+        } catch (e) {
+            Alert.alert('Error', 'Erro ao enviar sua imagem')
         }
     };
 
@@ -85,13 +138,17 @@ export default function Profile() {
         <View style={styles.container}>
             <Text style={styles.title}>Perfil</Text>
             <View style={styles.containerCenter}>
-                <Image
-                    style={styles.imagemProfile}
-                    source={profileImage ? { uri: profileImage } : require('../../assets/usuario.png')}
-                />
-                <TouchableOpacity style={styles.iconProfile}>
-                    <FontAwesome name="camera" size={30} color="black" />
-                </TouchableOpacity>
+                <View>
+                    <Image
+                        style={styles.imagemProfile}
+                        source={profileImage ? { uri: profileImage } : require('../../assets/usuario.png')}
+                    />
+                    {isEditing && (
+                        <TouchableOpacity style={styles.iconProfile} onPress={handleChooseImage}>
+                            <FontAwesome name="camera" size={30} color="#F8FAFF" />
+                        </TouchableOpacity>
+                    )}
+                </View>
                 <Text style={styles.subTitle}>Olá, {name}</Text>
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputTitle}>
@@ -110,11 +167,10 @@ export default function Profile() {
                     </Text>
                     <TextInput
                         style={styles.input}
-                        placeholder=""
+                        placeholder={name}
                         value={name}
                         editable={isEditing}
                         onChangeText={setName}
-
                     />
                     <FontAwesome name="pencil-square-o" size={24} color="black" style={styles.icon} />
                 </View>
@@ -128,12 +184,11 @@ export default function Profile() {
                         keyboardType="email-address"
                         editable={isEditing}
                         onChangeText={setEmail}
-
                     />
                     <FontAwesome name="pencil-square-o" size={24} color="black" style={styles.icon} />
                 </View>
                 <View style={styles.inputContainerBio}>
-                    <Text style={styles.inputTextBiografia}                    >
+                    <Text style={styles.inputTextBiografia}>
                         Sobre você
                     </Text>
                     <TextInput
@@ -147,13 +202,16 @@ export default function Profile() {
                     />
                     <FontAwesome name="pencil-square-o" size={24} color="black" style={styles.iconBiografia} />
                 </View>
-                <TouchableOpacity style={styles.resetPassword}>
-                    <Text style={{ color: 'blue', fontSize: 16 }}>Esqueceu sua senha?</Text>
-                </TouchableOpacity>
+
                 {!isEditing && (
-                    <TouchableOpacity style={styles.buttonEdit} onPress={handleEditPress}>
-                        <Text style={styles.textEdit}>Editar perfil</Text>
-                    </TouchableOpacity>
+                    <View style={styles.buttons}>
+                        <TouchableOpacity style={styles.resetPassword}>
+                            <Text style={{ color: 'blue', fontSize: 16 }}>Esqueceu sua senha?</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.buttonEdit} onPress={handleEditPress}>
+                            <Text style={styles.textEdit}>Editar perfil</Text>
+                        </TouchableOpacity>
+                    </View>
                 )}
                 {isEditing && (
                     <View style={styles.buttons}>
@@ -178,23 +236,30 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8FAFF',
     },
     containerCenter: {
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         width: '80%',
         marginBottom: 100,
     },
     iconProfile: {
-        marginBottom: 2,
+        backgroundColor: '#000',
+        padding: 10,
+        borderRadius: 100,
+        position: 'absolute',
+        top: 160,
+        right: 65,
         alignItems: 'center',
         justifyContent: 'center',
     },
     title: {
-        fontSize: 20,
+        fontSize: 25,
         marginTop: 5,
         fontWeight: 'bold',
         color: '#000',
     },
     subTitle: {
+        textTransform: 'capitalize',
         fontSize: 20,
         marginTop: 25,
         marginBottom: 25,
@@ -229,6 +294,9 @@ const styles = StyleSheet.create({
         height: 60,
     },
     resetPassword: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
         margin: 13,
     },
     buttonEdit: {
@@ -277,7 +345,7 @@ const styles = StyleSheet.create({
         height: 160,
     },
     buttons: {
-        width: '100%'
+        width: '100%',
     },
     buttonSalvar: {
         width: '100%',
@@ -286,20 +354,19 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 10,
         backgroundColor: '#598381',
-        marginBottom: 10,
-    },
-    textSalvar: {
-        fontSize: 15,
-        color: '#fff',
+        marginBottom: 15,
     },
     buttonCancelar: {
         width: '100%',
-        padding: 16,
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#FF6347',
+        padding: 16,
+        height: 50,
         borderRadius: 10,
-        marginBottom: 10,
+        backgroundColor: '#9F4A54',
+        marginBottom: 15,
+    },
+    textSalvar: {
+        color: '#fff',
     },
     textCancelar: {
         color: '#fff',

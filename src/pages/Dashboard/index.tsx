@@ -40,7 +40,7 @@ export default function Dashboard() {
             const response = await api.get('/profile/image');
             // console.log(response)
             const imageFileName = response.data.imageFileName;
-            const imageURL = `http://192.168.100.74:3333/uploads/${imageFileName}`;
+            const imageURL = `http://192.168.0.32:3333/uploads/${imageFileName}`;
             setProfileImage(imageURL);
         } catch (error) {
             console.log(error);
@@ -52,7 +52,7 @@ export default function Dashboard() {
             <ScrollView >
                 <View style={styles.container}>
                     <View style={styles.buttonProfile}>
-                        <Text style={styles.text}>Olá, {user.name.charAt(0).toUpperCase() + user.name.slice(1)}</Text>
+                        <Text style={[styles.text, { textTransform: 'capitalize' }]}>Olá, {user.name}</Text>
                         <View style={styles.containerProfile} >
                             <Image
                                 style={styles.imagem}
