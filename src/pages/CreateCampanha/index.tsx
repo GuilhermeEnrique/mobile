@@ -32,7 +32,7 @@ export default function CreateCampanhas() {
             quality: 1,
         });
 
-        if (!result.cancelled && result.uri) {
+        if (!result.canceled && result.uri) {
             setImage(result.uri);
         }
 
