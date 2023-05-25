@@ -85,9 +85,9 @@ export default function Dados() {
                     {results.length > 0 ? (
                         <View style={styles.ResultadosDados}>   
                             {results.map((result, index) => (
-                                <Text key={index}>Dado de número {index + 1} = {result}</Text>
+                                <Text key={index}>{index + 1}º Dado = {result}</Text>
                             ))}
-                            <Text>Soma dos resultados: {total}</Text>
+                            <Text style={styles.textSoma}>Soma dos resultados: {total}</Text>
                         </View>
                     ) : null}
                 </ScrollView>
@@ -167,6 +167,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         marginLeft: 10
+    },
+    textSoma:{
+        fontWeight: 'bold'
     },
     buttonContent: {
         flexDirection: 'row',

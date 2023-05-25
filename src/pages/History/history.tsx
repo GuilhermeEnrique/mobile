@@ -24,12 +24,13 @@ const History = ({ history }) => {
         <ScrollView style={styles.scrollView}>
             {history.map((roll, index) => (
                 <View key={index} style={styles.container}>
-                    <MaterialCommunityIcons name={getIconName(roll.type)} size={20} color="black" />
-                    <Text>Rolagem {index + 1}:</Text>
+                    <MaterialCommunityIcons name={getIconName(roll.type)} size={20} color="black" style={styles.textTitle} />
+                    <Text style={styles.textTitle}>{index + 1}ª Rolagem</Text>
                     {roll.result.map((result, i) => (
-                        <Text key={i}>Dado {i + 1} = {result}</Text>
+                        <Text key={i}>{i + 1}º Dado  = {result}</Text>
                     ))}
-                    <Text>Soma dos resultados: {roll.sum}</Text>
+                    <Text style={styles.textSoma}>Soma dos resultados: {roll.sum}</Text>
+                    <View style={styles.linha} />
                 </View>
             ))}
         </ScrollView>
@@ -49,9 +50,24 @@ const styles = StyleSheet.create({
     },
     container: {
         flexDirection: 'column',
-        padding: 13,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
         width: '100%',
     },
+    textTitle: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    textSoma: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    linha:{
+        marginTop: 2,
+        borderBottomColor: '#28AC92', 
+        borderBottomWidth: 1, 
+        width: '100%'
+    }
 });
 
 export default History;

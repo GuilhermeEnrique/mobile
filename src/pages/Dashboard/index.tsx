@@ -40,7 +40,7 @@ export default function Dashboard() {
             const response = await api.get('/profile/image');
             // console.log(response)
             const imageFileName = response.data.imageFileName;
-            const imageURL = `http://192.168.0.32:3333/uploads/${imageFileName}`;
+            const imageURL = `http://192.168.100.74:3333/uploads/${imageFileName}`;
             setProfileImage(imageURL);
         } catch (error) {
             console.log(error);
@@ -52,12 +52,12 @@ export default function Dashboard() {
             <ScrollView >
                 <View style={styles.container}>
                     <View style={styles.buttonProfile}>
-                        <Image
-                            style={styles.imagem}
-                            source={profileImage ? { uri: profileImage } : require('../../assets/usuario.png')}
-                        />
+                        <Text style={styles.text}>Olá, {user.name.charAt(0).toUpperCase() + user.name.slice(1)}</Text>
                         <View style={styles.containerProfile} >
-                            <Text style={styles.text}>Olá, {user.name.charAt(0).toUpperCase() + user.name.slice(1)}</Text>
+                            <Image
+                                style={styles.imagem}
+                                source={profileImage ? { uri: profileImage } : require('../../assets/usuario.png')}
+                            />
                             <View style={styles.buttonsProfile}>
                                 <TouchableOpacity
                                     onPress={Profile}
@@ -117,10 +117,9 @@ const styles = StyleSheet.create({
     },
     //Botão de perfil
     containerProfile: {
-        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: 25,
+        justifyContent: 'space-evenly',
+        flexDirection: 'row',
     },
     text: {
         color: '#F8FAFF',
@@ -129,25 +128,27 @@ const styles = StyleSheet.create({
         textShadowColor: '#000',
         textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 10,
+        margin: 10
     },
     imagem: {
-        width: '50%',
+        width: '60%',
         height: 160,
-        borderRadius: 20,
-        alignItems: 'center'
+        borderRadius: 10,
+        marginBottom: 10
     },
     buttonProfile: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: 16,
+        justifyContent: 'space-around',
         marginVertical: 10,
-        height: 180,
+        height: 210,
         width: '80%',
-        borderRadius: 20,
+
+        borderRadius: 10,
         borderColor: 'dark',
         backgroundColor: '#EDE8E8',
         borderWidth: 1,
+
         shadowColor: '#000',
         shadowOpacity: 0,
         shadowRadius: 0,
@@ -162,7 +163,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 8,
         borderRadius: 100,
-        marginTop: 10,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -175,12 +175,12 @@ const styles = StyleSheet.create({
         textShadowRadius: 10,
     },
     buttonsProfile: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
+        marginLeft: 25
     },
     EditProfile: {
-        margin: 5,
         padding: 5,
         alignItems: 'center',
         justifyContent: 'center',
@@ -188,18 +188,19 @@ const styles = StyleSheet.create({
     //Botões da pagina
     imagemButtons: {
         width: '100%',
-        height: 160,
+        height: 155,
         position: 'absolute',
-        borderRadius: 20,
+        borderRadius: 10,
         borderWidth: 1,
         borderColor: '#000',
+        opacity: 0.8
     },
     buttons: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'transparent',
-        height: 160,
+        height: 155,
         width: '80%',
         borderRadius: 20,
         marginBottom: 10,
