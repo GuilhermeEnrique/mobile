@@ -41,7 +41,6 @@ export default function Dashboard() {
         }
     }
 
-
     async function Campanhas() {
         navigation.navigate('Campanhas');
     }

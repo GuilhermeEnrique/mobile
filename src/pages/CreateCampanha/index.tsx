@@ -7,9 +7,14 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParmsList } from '../../routers/app.routes';
 import { api } from '../../services/api';
 
+interface Campanha {
+    id: string;
+    title: string;
+    description: string;
+    banner: string;
+}
 
 export default function CreateCampanhas() {
-
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
 
     const [title, setTitle] = useState('');
@@ -19,6 +24,7 @@ export default function CreateCampanhas() {
     const [campaignImage, setCampaignImage] = useState<string>('');
     const [typeImage, setTypeImage] = useState<string>('');
 
+    
     async function CreateCampanhas() {
         navigation.navigate('Campanhas');
     }
@@ -54,8 +60,8 @@ export default function CreateCampanhas() {
 
     const handleCreateCampaign = async () => {
         if (title === '' || description === '' || selectCampaignImage === '') {
-            Alert.alert('Erro', 'Preencha todos os campos para criar uma campanha!')
-                ; return;
+            Alert.alert('Erro', 'Preencha todos os campos para criar uma campanha!'); 
+            return;
         }
 
         const formData = new FormData();
@@ -79,7 +85,7 @@ export default function CreateCampanhas() {
                 Alert.alert('Error', 'Não foi possível criar uma campanha. Por favor, tente novamente mais tarde');
             } else {
                 Alert.alert('Sucesso', `Campanha ${title} criada`);
-                CreateCampanhas()
+
             }
         } catch (e) {
             Alert.alert('Error', 'Erro ao criar sua campanha');
@@ -88,6 +94,7 @@ export default function CreateCampanhas() {
         setTitle('');
         setDescription('');
         setSelectCampaignImage(null);
+        CreateCampanhas()
     };
 
     return (

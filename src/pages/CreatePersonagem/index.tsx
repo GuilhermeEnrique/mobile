@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, ScrollView, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from "@react-navigation/native";
@@ -8,14 +8,21 @@ import { StackParmsList } from '../../routers/app.routes';
 import RNPickerSelect from 'react-native-picker-select';
 import { api } from '../../services/api';
 
-
-//npm install react-native-image-picker
-// Link a biblioteca executando o seguinte comando no terminal:
-//npx react-native link react-native-image-picker
-
+interface Personagens {
+    id: string;
+    name: string;
+    life: number;
+    level: number;
+    description: string;
+    race: string;
+    classe: string;
+    campanhaId: string;
+    userId: string;
+}
 
 export default function CreateCampanhas() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
+
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [classe, setClasse] = useState('');
@@ -24,42 +31,94 @@ export default function CreateCampanhas() {
     const [life, setLife] = useState('');
     const [campanhasId, setCampanha] = useState('');
     const [userId, setUser] = useState('');
-    const [avatarUrl, setAvatarUrl] = useState('');
+    const [personagemImage, setPersonagemImage] = useState<string>('');
+
+    const [avatarUrl, setAvatarUrl] = useState<string>('');
+    const [typeImage, setTypeImage] = useState<string>('');
+
 
     async function Personagens() {
         navigation.navigate('Personagens');
     }
 
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
+    const handleChooseImage = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            alert('A permissão para acessar a biblioteca de mídia é necessária!');
+            return;
+        }
+
+        const pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [1, 1],
             quality: 1,
         });
 
-        // console.log(result);
-
-        if (!result.cancelled && result.uri) {
-            setAvatarUrl(result.uri);
+        if (pickerResult.canceled === true) {
+            return;
         }
+        const selectedAsset = pickerResult.assets[0];
+        const uri = selectedAsset.uri;
+        // Atualize o estado da imagem com a URI selecionada
+        setPersonagemImage(uri);
+
+        const filename = pickerResult.assets[0].uri.substring(pickerResult.assets[0].uri.lastIndexOf('/') + 1, pickerResult.assets[0].uri.length);
+        const extend = filename.split('.')[1];
+
+        setAvatarUrl(filename);
+        setTypeImage(extend);
     };
 
     async function openPersonagem() {
         if (name === '' || description === '' || avatarUrl === '' || race === '' || life === '' || level === '' || campanhasId === '' || userId === '') {
-            alert('Preencha todos os campos!');
+            Alert.alert('Erro', 'Preencha todos os campos para criar uma campanha!');
             return
         }
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('classe', classe);
+        formData.append('level', level);
+        formData.append('race', race);
+        formData.append('life', life);
+        formData.append('campanhasId', campanhasId);
+        formData.append('userId', userId);
+
+        formData.append('file', JSON.parse(JSON.stringify({
+            name: avatarUrl,
+            uri: personagemImage,
+            type: 'image/' + typeImage,
+        })));
 
         try {
-            const response = await api.post('/create-personagem', {
-               
+            const response = await api.post('/create-personagem', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             });
 
-        
-        } catch (error) {
-            console.log('Erro ao rolar dados:', error);
+            if (response.data.error) {
+                console.log(response.data.error)
+                Alert.alert('Error', 'Não foi possível criar um personagem. Por favor, tente novamente mais tarde');
+            } else {
+                Alert.alert('Sucesso', `Personagem ${name} criado`);
+
+            }
+        } catch (e) {
+            Alert.alert('Error', 'Erro ao criar sum personagem.');
         }
+
+        setName('');
+        setDescription('');
+        setLife('');
+        setClasse('');
+        setLevel('');
+        setRace('');
+        setAvatarUrl('');
+        setCampanha('');
+        setUser('');
+        Personagens()
     }
 
     return (
@@ -69,7 +128,7 @@ export default function CreateCampanhas() {
                     Criar um personagem
                 </Text>
                 <View style={styles.Inputs}>
-                    <TouchableOpacity style={styles.avatarButton} onPress={pickImage}>
+                    <TouchableOpacity style={styles.avatarButton} onPress={handleChooseImage}>
                         {avatarUrl ? (
                             <Image source={{ uri: avatarUrl }} style={styles.preview} />
                         ) : (

@@ -113,7 +113,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             });
 
             Alert.alert('Sucesso', 'Conta criada com sucesso!')
-            
+
             setLoadingAuth(false);
         } catch (error) {
             console.log("Erro ao registrar", error);
@@ -139,6 +139,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             ...userData,
         }));
     };
+
 
     return (
         <AuthContext.Provider
