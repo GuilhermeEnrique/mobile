@@ -6,37 +6,88 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParmsList } from '../../routers/app.routes';
 import { api } from '../../services/api';
-import axios from 'axios';
 
-type CreateCampaignProps = {
-    title: string;
-    description: string;
-    image: string;
-}
 
 export default function CreateCampanhas() {
+
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
+
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [image, setImage] = useState('');
+    const [selectCampaignImage, setSelectCampaignImage] = useState<string | null>('');
+
+    const [campaignImage, setCampaignImage] = useState<string>('');
+    const [typeImage, setTypeImage] = useState<string>('');
 
     async function CreateCampanhas() {
         navigation.navigate('Campanhas');
     }
 
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
+    const handleChooseImage = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            alert('A permissão para acessar a biblioteca de mídia é necessária!');
+            return;
+        }
+
+        const pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [1, 1],
             quality: 1,
         });
 
-        if (!result.canceled && result.uri) {
-            setImage(result.uri);
+        if (pickerResult.canceled === true) {
+            return;
+        }
+        const selectedAsset = pickerResult.assets[0];
+        const uri = selectedAsset.uri;
+        // Atualize o estado da imagem com a URI selecionada
+        setSelectCampaignImage(uri);
+
+        const filename = pickerResult.assets[0].uri.substring(pickerResult.assets[0].uri.lastIndexOf('/') + 1, pickerResult.assets[0].uri.length);
+        const extend = filename.split('.')[1];
+
+        setCampaignImage(filename);
+        setTypeImage(extend);
+    };
+
+    const handleCreateCampaign = async () => {
+        if (title === '' || description === '' || selectCampaignImage === '') {
+            Alert.alert('Erro', 'Preencha todos os campos para criar uma campanha!')
+                ; return;
         }
 
-        console.log(result)
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('file', JSON.parse(JSON.stringify({
+            name: campaignImage,
+            uri: selectCampaignImage,
+            type: 'image/' + typeImage,
+        })));
+
+        try {
+            const response = await api.post('/create-campanha', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            if (response.data.error) {
+                console.log(response.data.error)
+                Alert.alert('Error', 'Não foi possível criar uma campanha. Por favor, tente novamente mais tarde');
+            } else {
+                Alert.alert('Sucesso', `Campanha ${title} criada`);
+                CreateCampanhas()
+            }
+        } catch (e) {
+            Alert.alert('Error', 'Erro ao criar sua campanha');
+        }
+
+        setTitle('');
+        setDescription('');
+        setSelectCampaignImage(null);
     };
 
     return (
@@ -45,9 +96,9 @@ export default function CreateCampanhas() {
                 Criar uma campanha
             </Text>
             <View style={styles.Inputs}>
-                <TouchableOpacity style={styles.avatarButton} onPress={pickImage}>
-                    {image ? (
-                        <Image source={{ uri: image }} style={styles.preview} />
+                <TouchableOpacity style={styles.avatarButton} onPress={handleChooseImage}>
+                    {selectCampaignImage ? (
+                        <Image source={{ uri: selectCampaignImage }} style={styles.preview} />
                     ) : (
                         <>
                             <FontAwesome name="camera" size={24} color="black" />
@@ -74,7 +125,7 @@ export default function CreateCampanhas() {
             </View>
 
             <View style={styles.buttons}>
-                <TouchableOpacity style={styles.buttonSalvar}>
+                <TouchableOpacity style={styles.buttonSalvar} onPress={handleCreateCampaign}>
                     <Text style={styles.textSalvar}>Salvar</Text>
                 </TouchableOpacity>
 
@@ -147,7 +198,7 @@ const styles = StyleSheet.create({
         margin: 25,
     },
     buttonSalvar: {
-        width: '100%',
+        width: '90%',
         alignItems: 'center',
         padding: 16,
         height: 50,
@@ -156,7 +207,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     textSalvar: {
-        fontSize: 17,
+        fontSize: 15,
         color: '#fff',
     },
     buttonCancelar: {
@@ -165,13 +216,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 16,
         height: 50,
-        width: '100%',
+        width: '90%',
         borderRadius: 10,
     },
     textCancelar: {
-        fontSize: 17,
+        fontSize: 15,
         color: '#fff'
     }
-
 })
 
