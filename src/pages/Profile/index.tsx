@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { api } from '../../services/api';
 import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import axios from 'axios';
+import { AuthContext } from '../../contexts/AuthContext';
+
 interface UserData {
     id: string;
     name: string;
@@ -20,6 +21,66 @@ export default function Profile() {
     const [isEditing, setIsEditing] = useState(false);
     const [isCanceling, setIsCanceling] = useState(false);
     const [userData, setUserData] = useState<UserData | null>(null);
+
+    const { user, signOut, updateUser } = useContext(AuthContext);
+
+    const handleChooseImage = async () => {
+        Alert.alert(
+            'Modificar imagem',
+            'Tem certeza de que deseja modificar a imagem do perfil?',
+            [
+                {
+                    text: 'Cancelar',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Confirmar',
+                    onPress: selectImageFromPicker,
+                },
+            ],
+            { cancelable: false }
+        );
+    }
+
+    const selectImageFromPicker = async () => {
+        const pickerResult = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+        });
+
+        if (pickerResult.canceled === true) {
+            return;
+        }
+
+        const selectedAsset = pickerResult.assets[0];
+        const uri = selectedAsset.uri;
+        // Atualize o estado da imagem com a URI selecionada
+        setProfileImage(uri);
+
+        const filename = pickerResult.assets[0].uri.substring(pickerResult.assets[0].uri.lastIndexOf('/') + 1, pickerResult.assets[0].uri.length);
+        const extend = filename.split('.')[1];
+
+        const formData = new FormData();
+        formData.append('file', JSON.parse(JSON.stringify({
+            name: filename,
+            uri: pickerResult.assets[0].uri,
+            type: 'image/' + extend,
+        })));
+
+        try {
+            const response = await api.put(`/update-user:${id}`, formData, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            if (response.data.error) {
+                Alert.alert('Error', 'Não foi possível enviar sua imagem. Por favor, tente novamente mais tarde')
+            }
+        } catch (e) {
+            Alert.alert('Error', 'Erro ao enviar sua imagem')
+        }
+    };
 
     useEffect(() => {
         fetchUserData();
@@ -47,7 +108,7 @@ export default function Profile() {
         try {
             const response = await api.get('/profile/image');
             const imageFileName = response.data.imageFileName;
-            const imageURL = `http://192.168.100.74:3333/uploads/${imageFileName}`;
+            const imageURL = `${api.defaults.baseURL}/uploads/profile/${imageFileName}`;
             setProfileImage(imageURL);
         } catch (error) {
             console.log(error);
@@ -70,52 +131,21 @@ export default function Profile() {
             });
             console.log(response.data);
             setIsEditing(false);
+            updateUserFromProfile();
         } catch (error) {
             console.log(error);
         }
     };
 
-    const handleChooseImage = async () => {
-        const pickerResult = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 4],
-            quality: 1,
-        });
-
-        if (pickerResult.canceled === true) {
-            return;
-        }
-
-        const selectedAsset = pickerResult.assets[0];
-        const uri = selectedAsset.uri;
-        // Atualize o estado da imagem com a URI selecionada
-        setProfileImage(uri);
-
-        const filename = pickerResult.assets[0].uri.substring(pickerResult.assets[0].uri.lastIndexOf('/') + 1, pickerResult.assets[0].uri.length);
-        const extend = filename.split('.')[1];
-        
-        const formData = new FormData();
-        formData.append('file', JSON.parse(JSON.stringify({
-            name: filename,
-            uri: pickerResult.assets[0].uri,
-            type: 'image/' + extend,
-        })));
-        
+    async function updateUserFromProfile() {
         try {
-            const response = await api.put(`/update-user:${id}`, formData, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-            if (response.data.error) {
-                Alert.alert('Error', 'Não foi possível enviar sua imagem. Por favor, tente novamente mais tarde')
-            }
-        } catch (e) {
-            Alert.alert('Error', 'Erro ao enviar sua imagem')
+            const response = await api.get('/about');
+            const updatedUser = response.data;
+            updateUser(updatedUser);
+        } catch (error) {
+            console.log(error);
         }
-    };
+    }
 
     const handleEditPress = () => {
         setIsEditing(true);
@@ -141,13 +171,11 @@ export default function Profile() {
                         style={styles.imagemProfile}
                         source={profileImage ? { uri: profileImage } : require('../../assets/usuario.png')}
                     />
-                    {isEditing && (
-                        <TouchableOpacity style={styles.iconProfile} onPress={handleChooseImage}>
-                            <FontAwesome name="camera" size={30} color="#F8FAFF" />
-                        </TouchableOpacity>
-                    )}
+                    <TouchableOpacity style={styles.iconProfile} onPress={handleChooseImage}>
+                        <FontAwesome name="camera" size={30} color="#F8FAFF" />
+                    </TouchableOpacity>
                 </View>
-                <Text style={styles.subTitle}>Olá, {name}</Text>
+                <Text style={styles.subTitle}>Olá, {user.name}</Text>
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputTitle}>
                         Id
