@@ -1,20 +1,45 @@
-import React, { useContext, useEffect, useState } from "react"
-import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, ScrollView } from "react-native"
+import React, { useContext, useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, ScrollView } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import { StackParmsList } from "../../routers/app.routes";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { api } from '../../services/api';
 
 export default function Dashboard() {
     const [profileImage, setProfileImage] = useState('');
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
-    const { user, signOut } = useContext(AuthContext);
+    const { user, signOut, updateUser } = useContext(AuthContext);
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         fetchProfileImage();
-    }, []);
+        if (isFocused) {
+            updateUserFromProfile();
+        }
+    }, [isFocused]);
+
+    async function fetchProfileImage() {
+        try {
+            const response = await api.get('/profile/image');
+            const imageFileName = response.data.imageFileName;
+            const imageURL = `${api.defaults.baseURL}/uploads/profile/${imageFileName}`;
+            setProfileImage(imageURL);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    async function updateUserFromProfile() {
+        try {
+            const response = await api.get('/about');
+            const updatedUser = response.data;
+            updateUser(updatedUser);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
     async function Campanhas() {
@@ -28,32 +53,22 @@ export default function Dashboard() {
     async function Dados() {
         navigation.navigate('Dice');
     }
+
     async function Profile() {
         navigation.navigate('Profile');
     }
-    async function Guia() {
-        navigation.navigate('Guia')
-    }
 
-    const fetchProfileImage = async () => {
-        try {
-            const response = await api.get('/profile/image');
-            // console.log(response)
-            const imageFileName = response.data.imageFileName;
-            const imageURL = `http://192.168.100.74:3333/uploads/${imageFileName}`;
-            setProfileImage(imageURL);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    async function Guia() {
+        navigation.navigate('Guia');
+    }
 
     return (
         <SafeAreaView>
-            <ScrollView >
+            <ScrollView>
                 <View style={styles.container}>
                     <View style={styles.buttonProfile}>
                         <Text style={[styles.text, { textTransform: 'capitalize' }]}>Olá, {user.name}</Text>
-                        <View style={styles.containerProfile} >
+                        <View style={styles.containerProfile}>
                             <Image
                                 style={styles.imagem}
                                 source={profileImage ? { uri: profileImage } : require('../../assets/usuario.png')}
@@ -61,13 +76,15 @@ export default function Dashboard() {
                             <View style={styles.buttonsProfile}>
                                 <TouchableOpacity
                                     onPress={Profile}
-                                    style={styles.EditProfile}>
+                                    style={styles.EditProfile}
+                                >
                                     <FontAwesome name="edit" size={24} style={styles.icon} />
                                     <Text style={styles.textEdit}>Editar Perfil</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={styles.EditProfile}
-                                    onPress={signOut}>
+                                    onPress={signOut}
+                                >
                                     <FontAwesome name="sign-out" size={24} style={styles.icon} />
                                     <Text style={styles.textEdit}>Sair da conta</Text>
                                 </TouchableOpacity>
@@ -105,8 +122,9 @@ export default function Dashboard() {
                 </View>
             </ScrollView>
         </SafeAreaView>
-    )
+    );
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -193,7 +211,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#000',
-        opacity: 0.8
     },
     buttons: {
         flex: 1,
