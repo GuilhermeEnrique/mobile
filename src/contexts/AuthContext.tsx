@@ -1,6 +1,7 @@
-import React, { useState, createContext, ReactNode, useEffect } from "react";
+import React, { useState, createContext, ReactNode, useEffect, useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { api } from "../services/api";
+import { Alert } from "react-native";
 
 type AuthContextData = {
     user: UserProps;
@@ -10,6 +11,7 @@ type AuthContextData = {
     loading: boolean;
     signOut: () => Promise<void>;
     signUp: (credentials: SignUpProps) => Promise<void>;
+    updateUser: (userData: Partial<UserProps>) => void;
 };
 
 type UserProps = {
@@ -52,7 +54,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const isAuthenticated = !!user.name;
 
-
     useEffect(() => {
         async function getUser() {
             const userInfo = await AsyncStorage.getItem("@diceroll");
@@ -61,13 +62,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             if (Object.keys(hasUser).length > 0) {
                 api.defaults.headers.common["Authorization"] = `Bearer ${hasUser.token}`;
 
-                setUser({
-                    id: hasUser.id,
-                    name: hasUser.name,
-                    email: hasUser.email,
-                    token: hasUser.token,
-                    biografia: hasUser.biografia,
-                });
+                setUser(hasUser);
             }
             setLoading(false);
         }
@@ -117,26 +112,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 password,
             });
 
-            const { id, token } = response.data;
-
-            const user = {
-                id,
-                name,
-                email,
-                token,
-            };
-
-            await AsyncStorage.setItem("@diceroll", JSON.stringify(user));
-
-            api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-            setUser(user);
-
+            Alert.alert('Sucesso', 'Conta criada com sucesso!')
+            
             setLoadingAuth(false);
         } catch (error) {
             console.log("Erro ao registrar", error);
             setLoadingAuth(false);
-            alert("Erro ao registrar usuário. Por favor, tente novamente.");
+            Alert.alert("Error", "Erro ao registrar usuário. Por favor, tente novamente.");
         }
     }
 
@@ -151,6 +133,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         });
     }
 
+    const updateUser = (userData: Partial<UserProps>) => {
+        setUser((prevUser) => ({
+            ...prevUser,
+            ...userData,
+        }));
+    };
 
     return (
         <AuthContext.Provider
@@ -162,6 +150,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 loadingAuth,
                 signOut,
                 signUp,
+                updateUser,
             }}
         >
             {children}

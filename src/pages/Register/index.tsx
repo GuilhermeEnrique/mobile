@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -23,10 +23,16 @@ export default function SingUp() {
 
     async function handleSignUp() {
         if (email === '' || password === '' || name === '') {
+            Alert.alert('Alerta', 'Preencha todos os campons para criar uma conta')
             return;
         }
 
         await signUp({ email, password, name });
+
+        setEmail('');
+        setPassword('');
+        setUser('');
+        SignIn()
     }
 
     async function SignIn() {
