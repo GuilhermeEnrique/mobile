@@ -17,9 +17,14 @@ export default function Profile() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [biografia, setBiografia] = useState('');
-    const [profileImage, setProfileImage] = useState<string | null>('');
+
+    const [selectProfileImage, setSelectProfileImage] = useState<string | null>('');
+    const [profileImage, setprofileImage] = useState<string | null>('');
+    const [typeImage, setTypeImage] = useState<string | null>('');
+
     const [isEditing, setIsEditing] = useState(false);
     const [isCanceling, setIsCanceling] = useState(false);
+
     const [userData, setUserData] = useState<UserData | null>(null);
 
     const { user, signOut, updateUser } = useContext(AuthContext);
@@ -55,32 +60,15 @@ export default function Profile() {
         const selectedAsset = pickerResult.assets[0];
         const uri = selectedAsset.uri;
         // Atualize o estado da imagem com a URI selecionada
-        setProfileImage(uri);
+        setSelectProfileImage(uri);
 
         const filename = pickerResult.assets[0].uri.substring(pickerResult.assets[0].uri.lastIndexOf('/') + 1, pickerResult.assets[0].uri.length);
         const extend = filename.split('.')[1];
 
-        const formData = new FormData();
-        formData.append('file', JSON.parse(JSON.stringify({
-            name: filename,
-            uri: pickerResult.assets[0].uri,
-            type: 'image/' + extend,
-        })));
-
-        try {
-            const response = await api.put(`/update-user:${id}`, formData, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-            if (response.data.error) {
-                Alert.alert('Error', 'Não foi possível enviar sua imagem. Por favor, tente novamente mais tarde')
-            }
-        } catch (e) {
-            Alert.alert('Error', 'Erro ao enviar sua imagem')
-        }
+        setprofileImage(filename);
+        setTypeImage(extend);
     };
+
 
     useEffect(() => {
         fetchUserData();
@@ -109,7 +97,7 @@ export default function Profile() {
             const response = await api.get('/profile/image');
             const imageFileName = response.data.imageFileName;
             const imageURL = `${api.defaults.baseURL}/uploads/profile/${imageFileName}`;
-            setProfileImage(imageURL);
+            selectProfileImage(imageURL);
         } catch (error) {
             console.log(error);
         }
@@ -123,6 +111,28 @@ export default function Profile() {
     };
 
     const handleUpdateProfile = async () => {
+        const formData = new FormData();
+        formData.append('file', JSON.parse(JSON.stringify({
+            name: profileImage,
+            uri: selectProfileImage,
+            type: 'image/' + typeImage,
+        })));
+
+        try {
+            const response = await api.put(`/update-user:${id}`, formData, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            if (response.data.error) {
+                Alert.alert('Error', 'Não foi possível enviar sua imagem. Por favor, tente novamente mais tarde')
+            }
+        } catch (e) {
+            Alert.alert('Error', 'Erro ao enviar sua imagem')
+        }
+
+
         try {
             const response = await api.put(`/update-user:${id}`, {
                 name,
@@ -169,11 +179,13 @@ export default function Profile() {
                 <View>
                     <Image
                         style={styles.imagemProfile}
-                        source={profileImage ? { uri: profileImage } : require('../../assets/usuario.png')}
+                        source={selectProfileImage ? { uri: profileImage } : require('../../assets/usuario.png')}
                     />
-                    <TouchableOpacity style={styles.iconProfile} onPress={handleChooseImage}>
-                        <FontAwesome name="camera" size={30} color="#F8FAFF" />
-                    </TouchableOpacity>
+                    {isEditing && (
+                        <TouchableOpacity style={styles.iconProfile} onPress={handleChooseImage}>
+                            <FontAwesome name="camera" size={30} color="#F8FAFF" />
+                        </TouchableOpacity>
+                    )}
                 </View>
                 <Text style={styles.subTitle}>Olá, {user.name}</Text>
                 <View style={styles.inputContainer}>
