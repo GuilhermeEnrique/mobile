@@ -28,17 +28,23 @@ export default function Campanhas() {
         fetchCampanhaImage()
     }, []);
 
-    async function fetchCampanhaImage() {
+    async function fetchCampanhaImage(campanhaId?: string) {
         try {
-            const response = await api.get('/listen-campanha');
-            const campanha = response.data[1]; // Obter o primeiro objeto da resposta (assumindo que seja o único)
-            const imageFileName = campanha.banner;
+            let response;
+            if (campanhaId) {
+                response = await api.get(`/listen-campanha/${campanhaId}`);
+            } else {
+                response = await api.get('/listen-campanha');
+            }
+            const imageFileName = response.data.banner; // Obter o primeiro objeto da resposta (assumindo que seja o único)
             const imageURL = `${api.defaults.baseURL}/uploads/campaign/${imageFileName}`;
             setCampanhaImage(imageURL);
         } catch (error) {
             console.log(error);
         }
     };
+
+
 
     const fetchCampanhas = async () => {
         try {
@@ -111,6 +117,7 @@ export default function Campanhas() {
                                 source={campanhaImage ? { uri: campanhaImage } : require('../../assets/usuario.png')}
                             />
                             <Text style={styles.modalTitle}>{selectedCampanha.title}</Text>
+                            <Text style={styles.modalID}>ID: {selectedCampanha.id}</Text>
                             <Text style={styles.modalDescription}>Descrição: {selectedCampanha.description}</Text>
                             <Text style={styles.modalCreatedDate}>
                                 Criado em: {selectedCampanha.created_at}
@@ -257,7 +264,11 @@ const styles = StyleSheet.create({
     modalTitle: {
         fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 10,
+        marginBottom: 2,
+    },
+    modalID: {
+        fontSize: 14,
+        marginBottom: 20,
     },
     modalDescription: {
         textAlign: 'justify',
