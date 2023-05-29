@@ -163,7 +163,7 @@ export default function Profile() {
                         <FontAwesome name="camera" size={30} color="#F8FAFF" />
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.subTitle}>Olá, {name}</Text>
+                <Text style={styles.subTitle}>Olá, {userData?.name}</Text>
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputTitle}>
                         Id
