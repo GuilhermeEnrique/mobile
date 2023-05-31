@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker';
@@ -6,13 +6,6 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParmsList } from '../../routers/app.routes';
 import { api } from '../../services/api';
-
-interface Campanha {
-    id: string;
-    title: string;
-    description: string;
-    banner: string;
-}
 
 export default function CreateCampanhas() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
@@ -80,16 +73,11 @@ export default function CreateCampanhas() {
                 Alert.alert('Error', 'Não foi possível criar uma campanha. Por favor, tente novamente mais tarde');
             } else {
                 Alert.alert('Sucesso', `Campanha ${title} criada`);
-
+                navigation.navigate('Campanhas');
             }
         } catch (e) {
             Alert.alert('Error', 'Erro ao criar sua campanha');
         }
-
-        setTitle('');
-        setDescription('');
-        setSelectCampaignImage(null);
-        navigation.navigate('Campanhas');
     };
 
     return (
@@ -131,7 +119,7 @@ export default function CreateCampanhas() {
                     <Text style={styles.textSalvar}>Salvar</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.buttonCancelar} onPress={CreateCampanhas}>
+                <TouchableOpacity style={styles.buttonCancelar} onPress={() => navigation.navigate('Campanhas')}>
                     <Text style={styles.textCancelar}>Cancelar</Text>
                 </TouchableOpacity>
             </View>
@@ -226,4 +214,5 @@ const styles = StyleSheet.create({
         color: '#fff'
     }
 })
+
 

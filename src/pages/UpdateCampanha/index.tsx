@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker';
@@ -6,31 +6,60 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParmsList } from '../../routers/app.routes';
 import { api } from '../../services/api';
+import { RouteProp } from "@react-navigation/native";
 
-interface Campanha {
-    id: string;
-    title: string;
-    description: string;
-    banner: string;
-}
+type UpdateCampanhaRouteProp = RouteProp<StackParmsList, 'UpdateCampanha'>;
 
-export default function CreateCampanhas() {
+type Props = {
+    route: UpdateCampanhaRouteProp;
+};
+
+export default function UpdateCampanha({ route }: Props) {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
-
+    const { id, banner } = route.params;
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [selectCampaignImage, setSelectCampaignImage] = useState<string | null>('');
+    const [selectCampaignImage, setSelectCampaignImage] = useState<string>('');
 
     const [campaignImage, setCampaignImage] = useState<string>('');
     const [typeImage, setTypeImage] = useState<string>('');
 
-    const handleChooseImage = async () => {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-            alert('A permissão para acessar a biblioteca de mídia é necessária!');
-            return;
+    const fetchCampanhaData = async () => {
+        try {
+            const response = await api.get(`/listen-campanha?id=${id}`);
+            const campanha = response.data;
+            // Preencha os campos com as informações do usuário
+            setTitle(campanha[0].title)
+            setDescription(campanha[0].description)
+        } catch (error) {
+            console.log(error);
         }
+    };
 
+    useEffect(() => {
+        fetchCampanhaData();
+    }, []);
+
+
+    const handleChooseImage = async () => {
+        Alert.alert(
+            'Modificar imagem',
+            'Tem certeza de que deseja modificar a imagem do perfil?',
+            [
+                {
+                    text: 'Cancelar',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Confirmar',
+                    onPress: selectImageFromPicker,
+                },
+            ],
+            { cancelable: false }
+        );
+    }
+
+    const selectImageFromPicker = async () => {
         const pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
@@ -41,9 +70,8 @@ export default function CreateCampanhas() {
         if (pickerResult.canceled === true) {
             return;
         }
-        const selectedAsset = pickerResult.assets[0];
-        const uri = selectedAsset.uri;
-        // Atualize o estado da imagem com a URI selecionada
+
+        const uri = pickerResult.assets[0].uri;
         setSelectCampaignImage(uri);
 
         const filename = pickerResult.assets[0].uri.substring(pickerResult.assets[0].uri.lastIndexOf('/') + 1, pickerResult.assets[0].uri.length);
@@ -53,70 +81,62 @@ export default function CreateCampanhas() {
         setTypeImage(extend);
     };
 
-    const handleCreateCampaign = async () => {
-        if (title === '' || description === '' || selectCampaignImage === '') {
-            Alert.alert('Erro', 'Preencha todos os campos para criar uma campanha!');
-            return;
-        }
-
+    const handleUpdateCampaign = async () => {
         const formData = new FormData();
-        formData.append('title', title);
-        formData.append('description', description);
+
         formData.append('file', JSON.parse(JSON.stringify({
             name: campaignImage,
             uri: selectCampaignImage,
             type: 'image/' + typeImage,
         })));
+        formData.append('title', title);
+        formData.append('description', description);
 
         try {
-            const response = await api.post('/create-campanha', formData, {
+            const response = await api.put(`/update-campanha?id=${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
             if (response.data.error) {
                 console.log(response.data.error)
-                Alert.alert('Error', 'Não foi possível criar uma campanha. Por favor, tente novamente mais tarde');
+                Alert.alert('Error', 'Não foi possível atualizar sua campanha. Por favor, tente novamente mais tarde');
             } else {
-                Alert.alert('Sucesso', `Campanha ${title} criada`);
-
+                Alert.alert('Sucesso', `Campanha  atualizada`);
+                navigation.navigate('Campanhas');
             }
         } catch (e) {
-            Alert.alert('Error', 'Erro ao criar sua campanha');
+            Alert.alert('Error', 'Erro ao atualizar sua campanha');
+            console.log(e);
         }
-
-        setTitle('');
-        setDescription('');
-        setSelectCampaignImage(null);
-        navigation.navigate('Campanhas');
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>
-                Criar uma campanha
-            </Text>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>
+                    Atualizar a campanha
+                </Text>
+                <Text style={styles.title}>{title}</Text>
+            </View>
+
             <View style={styles.Inputs}>
+                {selectCampaignImage ? (
+                    <Image
+                        style={styles.bannerImage}
+                        source={{ uri: selectCampaignImage }}
+                    />
+                ) : <Text style={styles.Subtitle}>Para atualizar todos os dados é preciso adicionar uma imagem!</Text>}
                 <TouchableOpacity style={styles.avatarButton} onPress={handleChooseImage}>
-                    {selectCampaignImage ? (
-                        <Image source={{ uri: selectCampaignImage }} style={styles.preview} />
-                    ) : (
-                        <>
-                            <FontAwesome name="camera" size={24} color="black" />
-                            <Text>Selecionar avatar</Text>
-                        </>
-                    )}
+                    <FontAwesome name="camera" size={24} color="black" />
+                    <Text>Atualize o banner</Text>
                 </TouchableOpacity>
                 <TextInput
-                    placeholder='Nome da campanha'
                     style={styles.Input}
                     value={title}
                     onChangeText={(text) => setTitle(text)}
                 />
-
                 <TextInput
-                    placeholder='Descrição'
                     style={styles.InputDescription}
                     multiline={true}
                     numberOfLines={3}
@@ -124,18 +144,13 @@ export default function CreateCampanhas() {
                     value={description}
                     onChangeText={(text) => setDescription(text)}
                 />
-            </View>
-
-            <View style={styles.buttons}>
-                <TouchableOpacity style={styles.buttonSalvar} onPress={handleCreateCampaign}>
+                <TouchableOpacity style={styles.buttonSalvar} onPress={handleUpdateCampaign}>
                     <Text style={styles.textSalvar}>Salvar</Text>
                 </TouchableOpacity>
-
-                <TouchableOpacity style={styles.buttonCancelar} onPress={CreateCampanhas}>
+                <TouchableOpacity style={styles.buttonCancelar} onPress={() => navigation.navigate('Campanhas')}>
                     <Text style={styles.textCancelar}>Cancelar</Text>
                 </TouchableOpacity>
             </View>
-
         </View>
     )
 
@@ -147,37 +162,45 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: '#F8FAFF'
     },
+    titleContainer: {
+        marginTop: 10,
+        textAlign: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     title: {
         fontSize: 20,
-        marginTop: 5,
+        fontWeight: 'bold',
+        color: '#000',
+    },
+    Subtitle: {
+        textAlign: 'center',
+        marginBottom: 10,
+        fontSize: 20,
         fontWeight: 'bold',
         color: '#000',
     },
     Inputs: {
         width: '90%',
+        marginBottom: 300,
     },
     avatarButton: {
+        padding: 13,
         width: '100%',
-        height: 280,
+        height: 60,
         marginBottom: 8,
         backgroundColor: '#EDE8E8',
         borderWidth: 1,
         borderColor: '#646262',
-        borderRadius: 20,
+        borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    preview: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-        borderRadius: 20,
     },
     Input: {
         backgroundColor: '#EDE8E8',
         padding: 13,
         width: '100%',
-        height: 47,
+        height: 60,
         marginBottom: 10,
         borderRadius: 10,
         borderWidth: 1,
@@ -194,13 +217,13 @@ const styles = StyleSheet.create({
         borderColor: '#646262'
     },
     buttons: {
-        width: '90%',
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        margin: 25,
+        margin: 2,
     },
     buttonSalvar: {
-        width: '90%',
+        width: '100%',
         alignItems: 'center',
         padding: 16,
         height: 50,
@@ -218,12 +241,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 16,
         height: 50,
-        width: '90%',
+        width: '100%',
         borderRadius: 10,
     },
     textCancelar: {
         fontSize: 15,
         color: '#fff'
+    },
+    bannerImage: {
+        marginTop: 20,
+        width: '100%',
+        height: 300,
+        borderRadius: 10,
+        marginBottom: 10,
     }
 })
 

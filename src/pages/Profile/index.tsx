@@ -128,7 +128,6 @@ export default function Profile() {
                 email,
                 biografia,
             });
-            console.log(response.data);
             setIsEditing(false);
         } catch (error) {
             console.log(error);

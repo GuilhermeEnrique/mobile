@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Modal, Image } from 'react-native';
-import { useNavigation } from "@react-navigation/native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Modal, Image, ImageBackground } from 'react-native';
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { FontAwesome } from '@expo/vector-icons'
+import { AntDesign, FontAwesome } from '@expo/vector-icons'
 import { StackParmsList } from '../../routers/app.routes';
 import { api } from '../../services/api';
 
@@ -22,34 +22,37 @@ export default function Campanhas() {
     const [selectedCampanha, setSelectedCampanha] = useState<Campanha | null>(null);
     const [isModalVisible, setModalVisible] = useState(false);
     const [campanhaImage, setCampanhaImage] = useState('');
+    const [deletedCampanhaId, setDeletedCampanhaId] = useState<string | null>(null);
+    const isFocused = useIsFocused();
 
     useEffect(() => {
+        fetchCampanhaImage();
         fetchCampanhas();
-        fetchCampanhaImage()
-    }, []);
+    }, [isFocused, deletedCampanhaId]);
 
     async function fetchCampanhaImage(campanhaId?: string) {
         try {
             let response;
             if (campanhaId) {
-                response = await api.get(`/listen-campanha/${campanhaId}`);
+                response = await api.get(`/listen-campanha?id=${campanhaId}`);
+                const campanha = response.data[0];
+                if (campanha) {
+                    const imageFileName = campanha.banner;
+                    const imageURL = `${api.defaults.baseURL}/uploads/campaign/${imageFileName}`;
+                    setCampanhaImage(imageURL);
+                }
             } else {
                 response = await api.get('/listen-campanha');
             }
-            const imageFileName = response.data.banner; // Obter o primeiro objeto da resposta (assumindo que seja o único)
-            const imageURL = `${api.defaults.baseURL}/uploads/campaign/${imageFileName}`;
-            setCampanhaImage(imageURL);
         } catch (error) {
             console.log(error);
         }
     };
 
-
-
     const fetchCampanhas = async () => {
         try {
             const response = await api.get('/listen-campanha');
-            setCampanhas(response.data);
+            setCampanhas(response.data.filter((campanha: Campanha) => campanha.id !== deletedCampanhaId));
         } catch (error) {
             console.log('Error fetching campanhas:', error);
         }
@@ -59,7 +62,7 @@ export default function Campanhas() {
         if (campanhas.length === 0) {
             return (
                 <View>
-                    <FontAwesome name="remove" size={50} style={styles.icon} />
+                    <FontAwesome name="warning" size={50} style={styles.icon} />
                     <Text style={styles.emptyList}>Nenhuma campanha foi encontrada...</Text>
                 </View>);
         }
@@ -73,7 +76,7 @@ export default function Campanhas() {
                         onPress={() => handleSelectCampanha(campanha)}
                     >
                         <Text style={styles.titleTextCampanha}>{campanha.title}</Text>
-                        <FontAwesome name="chevron-down" size={24} color="black" />
+                        <FontAwesome name="chevron-down" size={20} color="black" style={styles.IconCampanha} />
                     </TouchableOpacity>
                 ))}
             </View>
@@ -82,12 +85,50 @@ export default function Campanhas() {
 
     const handleSelectCampanha = (campanha: Campanha) => {
         setSelectedCampanha(campanha);
+        fetchCampanhaImage(campanha.id);
         setModalVisible(true);
     };
 
     const closeModal = () => {
         setModalVisible(false);
     };
+
+    const EditCampanha = () => {
+        setModalVisible(false);
+        if (selectedCampanha) {
+            navigation.navigate('UpdateCampanha', {
+                id: selectedCampanha.id,
+                title: selectedCampanha.title,
+                description: selectedCampanha.description,
+                banner: selectedCampanha.banner,
+            });
+        }
+    }
+
+    const handleDeleteCampanha = async () => {
+        try {
+            const response = await api.delete(`/delete-campanha?campanhasId=${selectedCampanha?.id}`);
+
+            if (response.status === 200) {
+                console.log('Campanha excluída com sucesso!');
+                setDeletedCampanhaId(selectedCampanha?.id ?? null);
+            } else {
+                console.log('Ocorreu um erro ao excluir a campanha.');
+            }
+
+            setModalVisible(false);
+        } catch (error) {
+            console.log('Ocorreu um erro ao excluir a campanha:', error);
+        }
+    };
+
+    function formatDateTime(dateTime: string) {
+        const date = new Date(dateTime);
+        const formattedDate = date.toLocaleDateString('pt-BR');
+        const formattedTime = date.toLocaleTimeString('pt-BR');
+        return `${formattedDate} às ${formattedTime}`;
+    }
+
 
     async function Campanhas() {
         navigation.navigate('CreateCampanhas');
@@ -118,30 +159,37 @@ export default function Campanhas() {
                             />
                             <Text style={styles.modalTitle}>{selectedCampanha.title}</Text>
                             <Text style={styles.modalID}>ID: {selectedCampanha.id}</Text>
-                            <Text style={styles.modalDescription}>Descrição: {selectedCampanha.description}</Text>
+
+                            <ScrollView style={styles.descriptionScrollView}>
+                                <Text style={styles.modalDescription}>{selectedCampanha.description}</Text>
+                            </ScrollView>
+
                             <Text style={styles.modalCreatedDate}>
-                                Criado em: {selectedCampanha.created_at}
+                                Criado em: {formatDateTime(selectedCampanha.created_at)}
                             </Text>
                             <Text style={styles.modalPersonagem}>
                                 Personagem vinculado: {selectedCampanha.characters}
                             </Text>
                             <View style={styles.modalButtons}>
-                                <TouchableOpacity style={styles.modalCloseButton} onPress={closeModal}>
-                                    <FontAwesome name="trash" size={50} style={styles.icon} />
+                                <TouchableOpacity style={styles.modalCloseButton} onPress={handleDeleteCampanha}>
+                                    <FontAwesome name="trash" size={50} style={styles.iconDelete} />
+                                    <Text style={styles.iconDelete}>Deletar</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.modalCloseButton} onPress={EditCampanha}>
+                                    <AntDesign name="edit" size={50} color="black" style={styles.iconEdit} />
+                                    <Text style={styles.iconEdit}>Editar</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.modalCloseButton} onPress={closeModal}>
-                                    <FontAwesome name="edit" size={50} style={styles.icon} />
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.modalCloseButton} onPress={closeModal}>
-                                    <FontAwesome name="remove" size={50} style={styles.icon} />
+                                    <FontAwesome name="remove" size={50} style={styles.iconFechar} />
+                                    <Text style={styles.iconFechar}>Fechar</Text>
                                 </TouchableOpacity>
                             </View>
-
                         </View>
                     </View>
                 </Modal>
-            )}
-        </View>
+            )
+            }
+        </View >
     );
 }
 
@@ -172,9 +220,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
-        textShadowColor: '#000',
-        textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 2,
     },
     icon: {
         color: '#9F4A54',
@@ -183,7 +228,22 @@ const styles = StyleSheet.create({
 
         textShadowColor: '#000',
         textShadowOffset: { width: 3, height: 3 },
-        textShadowRadius: 5,
+        textShadowRadius: 2,
+    },
+    iconDelete: {
+        color: '#9F4A54',
+        textAlign: 'center',
+        justifyContent: 'center',
+    },
+    iconEdit: {
+        color: '#255273',
+        textAlign: 'center',
+        justifyContent: 'center',
+    },
+    iconFechar: {
+        color: '#9F4A54',
+        textAlign: 'center',
+        justifyContent: 'center',
     },
     listCampanhas: {
         flexDirection: 'column',
@@ -192,6 +252,7 @@ const styles = StyleSheet.create({
         marginBottom: 1,
     },
     selectCampanha: {
+        backgroundColor: '#EDE8E8',
         width: 400,
         height: 160,
         alignItems: 'center',
@@ -202,6 +263,11 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderRadius: 10,
     },
+    backgroundImage: {
+        justifyContent: 'center',
+        width: '100%',
+        height: '20%',
+    },
     titleText: {
         textAlign: 'center',
         fontSize: 25,
@@ -209,15 +275,30 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     titleTextCampanha: {
+        paddingHorizontal: 10,
         textAlign: 'center',
-        fontSize: 18,
-        margin: 10,
+        fontSize: 20,
+        width: '100%',
+        height: '20%',
         fontWeight: 'bold',
         color: '#fff',
 
+        alignItems: 'center',
+        justifyContent: 'center',
+
         textShadowColor: '#000',
         textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 10,
+        textShadowRadius: 5,
+    },
+    IconCampanha: {
+        textAlign: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '20%',
+        color: '#fff',
+        textShadowColor: '#000',
+        textShadowOffset: { width: 1, height: 1 },
+        textShadowRadius: 5,
     },
     buttonNewCampanha: {
         alignItems: 'center',
@@ -255,20 +336,18 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         borderRadius: 10,
         marginBottom: 10,
-
-        shadowColor: '#000',
-        shadowOffset: { width: 1, height: 2 },
-        shadowOpacity: 0.9,
-        shadowRadius: 10,
     },
     modalTitle: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 2,
     },
     modalID: {
-        fontSize: 14,
+        fontSize: 12,
         marginBottom: 20,
+    },
+    descriptionScrollView: {
+        maxHeight: 200,
     },
     modalDescription: {
         textAlign: 'justify',
@@ -283,14 +362,16 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     modalCloseButton: {
-        padding: 30,
+        paddingHorizontal: 50,
         borderRadius: 10,
-        marginTop: 20,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        alignSelf: 'center',
     },
     modalButtons: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        justifyContent: 'space-around',
+        marginTop: 20,
     },
     modalCloseButtonText: {
         fontSize: 16,
