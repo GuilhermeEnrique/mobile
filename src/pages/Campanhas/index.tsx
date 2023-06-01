@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Modal, Image, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Modal, Image } from 'react-native';
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
@@ -12,7 +12,10 @@ interface Campanha {
     description: string;
     banner: string;
     created_at: string;
-    characters: string;
+    characters: {
+        name: string;
+        classe: string;
+    }[];
 }
 
 export default function Campanhas() {
@@ -129,10 +132,10 @@ export default function Campanhas() {
         return `${formattedDate} às ${formattedTime}`;
     }
 
-
     async function Campanhas() {
         navigation.navigate('CreateCampanhas');
     }
+
     return (
         <View style={styles.container}>
             <View style={styles.title}>
@@ -161,15 +164,24 @@ export default function Campanhas() {
                             <Text style={styles.modalID}>ID: {selectedCampanha.id}</Text>
 
                             <ScrollView style={styles.descriptionScrollView}>
+                            <Text style={styles.TextDescription}>Descrição</Text>
                                 <Text style={styles.modalDescription}>{selectedCampanha.description}</Text>
                             </ScrollView>
 
                             <Text style={styles.modalCreatedDate}>
                                 Criado em: {formatDateTime(selectedCampanha.created_at)}
                             </Text>
-                            <Text style={styles.modalPersonagem}>
-                                Personagem vinculado: {selectedCampanha.characters}
-                            </Text>
+                            <Text style={styles.modalPersonagem}>Personagens vinculados:</Text>
+                            <ScrollView style={styles.PersonagemScrollView}>
+                                <View style={styles.ViewPersonagemModal}>
+                                    {selectedCampanha.characters.map((character, index) => (
+                                        <Text key={index} style={styles.textPersonagem}>
+                                            {character.name} é um {character.classe}!
+                                        </Text>
+                                    ))}
+                                </View>
+                            </ScrollView>
+
                             <View style={styles.modalButtons}>
                                 <TouchableOpacity style={styles.modalCloseButton} onPress={handleDeleteCampanha}>
                                     <FontAwesome name="trash" size={50} style={styles.iconDelete} />
@@ -325,7 +337,7 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         backgroundColor: '#FFF',
-        padding: 20,
+        padding: 30,
         borderRadius: 10,
         width: '90%',
         alignItems: 'center',
@@ -344,10 +356,29 @@ const styles = StyleSheet.create({
     },
     modalID: {
         fontSize: 12,
-        marginBottom: 20,
+        marginBottom: 10,
     },
     descriptionScrollView: {
+        width: '100%',
         maxHeight: 200,
+    },
+    PersonagemScrollView: {
+        maxHeight: 80,
+        width: '100%',
+        textAlign: 'center'
+    },
+    ViewPersonagemModal: {
+        justifyContent: 'center',
+        textAlign: 'center'
+    },
+    textPersonagem: {
+        margin: 2,
+        textAlign: 'center',
+    },
+    TextDescription: {
+        margin: 2,
+        textAlign: 'center',
+        fontWeight: 'bold',
     },
     modalDescription: {
         textAlign: 'justify',
@@ -355,11 +386,13 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     modalCreatedDate: {
+        marginTop: 5,
         fontSize: 14,
         marginBottom: 5,
     },
     modalPersonagem: {
-        fontSize: 14,
+        fontSize: 15,
+        fontWeight: 'bold'
     },
     modalCloseButton: {
         paddingHorizontal: 50,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, ScrollView, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker';
@@ -7,39 +7,48 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParmsList } from '../../routers/app.routes';
 import RNPickerSelect from 'react-native-picker-select';
 import { api } from '../../services/api';
+import { AuthContext } from '../../contexts/AuthContext';
 
-interface Personagens {
+interface Campanha {
     id: string;
-    name: string;
-    life: number;
-    level: number;
-    description: string;
-    race: string;
-    classe: string;
-    campanhaId: string;
-    userId: string;
+    title: string;
 }
 
-export default function CreateCampanhas() {
+export default function CreatePersonagem() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
+    const { user } = useContext(AuthContext);
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+    const [personality, setPersonality] = useState('');
     const [classe, setClasse] = useState('');
     const [level, setLevel] = useState('');
     const [race, setRace] = useState('');
     const [life, setLife] = useState('');
     const [campanhasId, setCampanha] = useState('');
-    const [userId, setUser] = useState('');
-    const [personagemImage, setPersonagemImage] = useState<string>('');
 
+    const [personagemImage, setPersonagemImage] = useState<string>('');
     const [avatarUrl, setAvatarUrl] = useState<string>('');
     const [typeImage, setTypeImage] = useState<string>('');
 
+    const [campanhas, setCampanhas] = useState<Campanha[]>([]);
 
     async function Personagens() {
         navigation.navigate('Personagens');
     }
+
+    useEffect(() => {
+        const loadCampanhas = async () => {
+            try {
+                const response = await api.get('/listen-campanha');
+                setCampanhas(response.data.filter((campanha: Campanha) => campanha.id));
+            } catch (error) {
+                console.log('Error fetching campanhas:', error);
+            }
+        };
+
+        loadCampanhas();
+    }, []);
 
     const handleChooseImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -71,19 +80,20 @@ export default function CreateCampanhas() {
     };
 
     async function openPersonagem() {
-        if (name === '' || description === '' || avatarUrl === '' || race === '' || life === '' || level === '' || campanhasId === '' || userId === '') {
+        if (name === '' || description === '' || personality === '' || avatarUrl === '' || race === '' || life === '' || level === '' || campanhasId === '') {
             Alert.alert('Erro', 'Preencha todos os campos para criar uma campanha!');
             return
         }
         const formData = new FormData();
         formData.append('name', name);
         formData.append('description', description);
+        formData.append('personality', personality);
         formData.append('classe', classe);
         formData.append('level', level);
         formData.append('race', race);
         formData.append('life', life);
         formData.append('campanhasId', campanhasId);
-        formData.append('userId', userId);
+        formData.append('userId', user.id);
 
         formData.append('file', JSON.parse(JSON.stringify({
             name: avatarUrl,
@@ -117,7 +127,6 @@ export default function CreateCampanhas() {
         setRace('');
         setAvatarUrl('');
         setCampanha('');
-        setUser('');
         Personagens()
     }
 
@@ -129,8 +138,8 @@ export default function CreateCampanhas() {
                 </Text>
                 <View style={styles.Inputs}>
                     <TouchableOpacity style={styles.avatarButton} onPress={handleChooseImage}>
-                        {avatarUrl ? (
-                            <Image source={{ uri: avatarUrl }} style={styles.preview} />
+                        {personagemImage ? (
+                            <Image source={{ uri: personagemImage }} style={styles.preview} />
                         ) : (
                             <><FontAwesome name="camera" size={24} color="black" /><Text>Selecionar avatar</Text></>
                         )}
@@ -167,6 +176,15 @@ export default function CreateCampanhas() {
                         onChangeText={(text) => setDescription(text)}
                     />
                     <TextInput
+                        placeholder='Personalidade'
+                        style={styles.InputDescription}
+                        multiline={true}
+                        numberOfLines={3}
+                        textAlignVertical="top"
+                        value={personality}
+                        onChangeText={(text) => setPersonality(text)}
+                    />
+                    <TextInput
                         placeholder='Raça'
                         style={styles.Input}
                         value={race}
@@ -181,22 +199,15 @@ export default function CreateCampanhas() {
                     <RNPickerSelect
                         value={campanhasId}
                         onValueChange={(value) => setCampanha(value)}
+                        placeholder={{ label: 'Escolha uma campanha', value: null, color: '#646262', }}
                         items={[
-                            { label: 'O Retorno do rei', value: '1' },
+                            ...campanhas.map((campanha) => ({
+                                label: campanha.title,
+                                value: campanha.id,
+                            })),
                         ]}
-                        placeholder={{ label: 'Escolha uma campanha', value: null }}
                     />
-                    <RNPickerSelect
-                        value={userId}
-                        onValueChange={(value) => setUser(value)}
-                        items={[
-                            { label: 'Teste', value: '1' },
-                        ]}
-                        placeholder={{ label: 'Esse personagem pertencer a', value: null }}
-                    />
-
                 </View>
-
                 <View style={styles.buttons}>
                     <TouchableOpacity style={styles.buttonSalvar} onPress={openPersonagem}>
                         <Text style={styles.textSalvar}>Salvar</Text>
@@ -206,7 +217,7 @@ export default function CreateCampanhas() {
                     </TouchableOpacity>
                 </View>
             </View>
-        </ScrollView>
+        </ScrollView >
 
     )
 }
@@ -214,14 +225,14 @@ export default function CreateCampanhas() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // alignItems: 'center',
-        // justifyContent: 'space-between',
+        width: '100%',
         backgroundColor: '#F8FAFF'
     },
     containerCenter: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        backgroundColor: '#F8FAFF'
     },
     title: {
         fontSize: 20,
@@ -231,10 +242,11 @@ const styles = StyleSheet.create({
     },
     Inputs: {
         width: '90%',
+        alignItems: 'center'
     },
     avatarButton: {
         width: '100%',
-        height: 280,
+        height: 120,
         marginBottom: 8,
         backgroundColor: '#EDE8E8',
         borderWidth: 1,
@@ -263,7 +275,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#EDE8E8',
         padding: 13,
         width: '100%',
-        height: 140,
+        height: 120,
         marginBottom: 10,
         borderRadius: 10,
         borderWidth: 1,

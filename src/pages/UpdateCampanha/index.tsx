@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParmsList } from '../../routers/app.routes';
 import { api } from '../../services/api';
-import { RouteProp } from "@react-navigation/native";
+import {  } from "@react-navigation/native";
 
 type UpdateCampanhaRouteProp = RouteProp<StackParmsList, 'UpdateCampanha'>;
 
