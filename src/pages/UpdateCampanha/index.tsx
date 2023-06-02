@@ -16,19 +16,20 @@ type Props = {
 
 export default function UpdateCampanha({ route }: Props) {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
-    const { id, banner } = route.params;
+    const { id } = route.params;
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [selectCampaignImage, setSelectCampaignImage] = useState<string>('');
+    const [banner, setBanner] = useState<string>('');
 
-    const [campaignImage, setCampaignImage] = useState<string>('');
-    const [typeImage, setTypeImage] = useState<string>('');
 
     const fetchCampanhaData = async () => {
         try {
             const response = await api.get(`/listen-campanha?id=${id}`);
             const campanha = response.data;
             // Preencha os campos com as informações do usuário
+            const imageFileName = response.data[0].banner;
+            const imageURL = `${api.defaults.baseURL}/uploads/campaign/${imageFileName}`;
+            setBanner(imageURL);
             setTitle(campanha[0].title)
             setDescription(campanha[0].description)
         } catch (error) {
@@ -72,13 +73,34 @@ export default function UpdateCampanha({ route }: Props) {
         }
 
         const uri = pickerResult.assets[0].uri;
-        setSelectCampaignImage(uri);
-
         const filename = pickerResult.assets[0].uri.substring(pickerResult.assets[0].uri.lastIndexOf('/') + 1, pickerResult.assets[0].uri.length);
         const extend = filename.split('.')[1];
 
-        setCampaignImage(filename);
-        setTypeImage(extend);
+        const formData = new FormData()
+        formData.append('file', JSON.parse(JSON.stringify({
+            name: filename,
+            uri: uri,
+            type: 'image/' + extend,
+        })));
+
+        try {
+            const response = await api.put(`/update-campanha?id=${id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            if (response.data.error) {
+                console.log(response.data.error)
+                Alert.alert('Error', 'Não foi possível atualizar sua campanha. Por favor, tente novamente mais tarde');
+            } else {
+                Alert.alert('Sucesso', `Imagem  atualizada`);
+                fetchCampanhaData();
+            }
+        } catch (e) {
+            Alert.alert('Error', 'Erro ao atualizar sua campanha');
+            console.log(e);
+        }
+
     };
 
     const handleUpdateCampaign = async () => {
@@ -86,11 +108,6 @@ export default function UpdateCampanha({ route }: Props) {
 
         formData.append('title', title);
         formData.append('description', description);
-        formData.append('file', JSON.parse(JSON.stringify({
-            name: campaignImage,
-            uri: selectCampaignImage,
-            type: 'image/' + typeImage,
-        })));
 
         try {
             const response = await api.put(`/update-campanha?id=${id}`, formData, {
@@ -121,15 +138,12 @@ export default function UpdateCampanha({ route }: Props) {
             </View>
 
             <View style={styles.Inputs}>
-                {selectCampaignImage ? (
-                    <Image
-                        style={styles.bannerImage}
-                        source={{ uri: selectCampaignImage }}
-                    />
-                ) : <Text style={styles.Subtitle}>Para atualizar todos os dados é preciso adicionar uma imagem!</Text>}
+                <Image
+                    source={banner ? { uri: banner } : require('../../assets/usuario.png')}
+                    style={styles.bannerImage}
+                />
                 <TouchableOpacity style={styles.avatarButton} onPress={handleChooseImage}>
-                    <FontAwesome name="camera" size={24} color="black" />
-                    <Text>Atualize o banner</Text>
+                    <FontAwesome name="camera" size={50} color="#EDE8E8" />
                 </TouchableOpacity>
                 <TextInput
                     style={styles.Input}
@@ -185,21 +199,18 @@ const styles = StyleSheet.create({
         marginBottom: 300,
     },
     avatarButton: {
-        padding: 13,
-        width: '100%',
-        height: 60,
-        marginBottom: 8,
-        backgroundColor: '#EDE8E8',
-        borderWidth: 1,
-        borderColor: '#646262',
-        borderRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: '#000',
+        padding: 10,
+        borderRadius: 40,
+        top: 280,
+        right: 160,
+        position: 'absolute',
     },
     Input: {
         backgroundColor: '#EDE8E8',
         padding: 13,
         width: '100%',
+        marginTop: 40,
         height: 60,
         marginBottom: 10,
         borderRadius: 10,
@@ -210,7 +221,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#EDE8E8',
         padding: 13,
         width: '100%',
-        height: 140,
+        height: 180,
         marginBottom: 10,
         borderRadius: 10,
         borderWidth: 1,
