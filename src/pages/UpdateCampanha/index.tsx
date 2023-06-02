@@ -6,7 +6,7 @@ import { useNavigation, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParmsList } from '../../routers/app.routes';
 import { api } from '../../services/api';
-import {  } from "@react-navigation/native";
+import { } from "@react-navigation/native";
 
 type UpdateCampanhaRouteProp = RouteProp<StackParmsList, 'UpdateCampanha'>;
 
@@ -84,13 +84,13 @@ export default function UpdateCampanha({ route }: Props) {
     const handleUpdateCampaign = async () => {
         const formData = new FormData();
 
+        formData.append('title', title);
+        formData.append('description', description);
         formData.append('file', JSON.parse(JSON.stringify({
             name: campaignImage,
             uri: selectCampaignImage,
             type: 'image/' + typeImage,
         })));
-        formData.append('title', title);
-        formData.append('description', description);
 
         try {
             const response = await api.put(`/update-campanha?id=${id}`, formData, {

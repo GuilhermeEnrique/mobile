@@ -129,15 +129,6 @@ export default function Personagens() {
         if (selectedPersonagem) {
             navigation.navigate('UpdatePersonagem', {
                 id: selectedPersonagem.id,
-                name: selectedPersonagem.name,
-                description: selectedPersonagem.description,
-                personality: selectedPersonagem.personality,
-                classe: selectedPersonagem.classe,
-                race: selectedPersonagem.race,
-                level: selectedPersonagem.level,
-                life: selectedPersonagem.life,
-                banner: selectedPersonagem.banner,
-                campanhas: selectedPersonagem.campanhas,
             });
         }
     }
