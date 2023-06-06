@@ -164,7 +164,7 @@ export default function Campanhas() {
                             <Text style={styles.modalID}>ID: {selectedCampanha.id}</Text>
 
                             <ScrollView style={styles.descriptionScrollView}>
-                            <Text style={styles.TextDescription}>Descrição</Text>
+                                <Text style={styles.TextDescription}>Descrição</Text>
                                 <Text style={styles.modalDescription}>{selectedCampanha.description}</Text>
                             </ScrollView>
 

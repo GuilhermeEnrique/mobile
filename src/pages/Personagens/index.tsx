@@ -123,6 +123,9 @@ export default function Personagens() {
     async function Personagem() {
         navigation.navigate('CreatePersonagem');
     }
+    async function Atributos() {
+        navigation.navigate('Atributos');
+    }
 
     const UpdatePersonagem = () => {
         setModalVisible(false);
@@ -195,7 +198,7 @@ export default function Personagens() {
                                     <FontAwesome name="trash" size={40} style={styles.iconDelete} />
                                     <Text style={styles.iconDelete}>Deletar</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.modalCloseButton} onPress={closeModal}>
+                                <TouchableOpacity style={styles.modalCloseButton} onPress={Atributos}>
                                     <AntDesign name="book" size={40} color="black" style={styles.iconEdit} />
                                     <Text style={styles.iconEdit}>Atributos</Text>
                                 </TouchableOpacity>

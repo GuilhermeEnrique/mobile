@@ -11,6 +11,7 @@ import Profile from '../pages/Profile';
 import Guia from '../pages/Guia';
 import UpdateCampanha from '../pages/UpdateCampanha';
 import UpdatePersonagem from '../pages/UpdatePersonagem';
+import Atributos from '../pages/Atributos'
 
 export type StackParmsList = {
     Dashboard: undefined;
@@ -29,7 +30,8 @@ export type StackParmsList = {
     };
     UpdatePersonagem: {
         id: string;
-    }
+    },
+    Atributos: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParmsList>();
@@ -85,6 +87,11 @@ function AppRoutes() {
             <Stack.Screen
                 name="UpdatePersonagem"
                 component={UpdatePersonagem}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="Atributos"
+                component={Atributos}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>
