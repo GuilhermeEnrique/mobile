@@ -117,6 +117,7 @@ export default function Atributos({ route }: Props) {
         }
     };
 
+
     const handleAdicionar = () => {
         setEditMode(true);
     };
@@ -205,8 +206,8 @@ export default function Atributos({ route }: Props) {
 
             {editMode ? (
                 <View style={styles.buttonsEditMode}>
-                    <TouchableOpacity style={styles.buttonSalvar} onPress={handleCreate}>
-                        <Text style={styles.textButton}>Salvar</Text>
+                    <TouchableOpacity style={styles.buttonSalvar} onPress={hasAtributos ? handleUpdate : handleCreate}>
+                        <Text style={styles.textButton}>{hasAtributos ? 'Atualizar' : 'Salvar'}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttonCancelarEditMode} onPress={handleCancelar}>
                         <Text style={styles.textButton}>Cancelar</Text>
@@ -267,15 +268,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     inputValue: {
-        padding: 13,
         width: '20%',
-        height: 40,
-        backgroundColor: '#fff',
+        fontSize: 20,
+        height: 50,
         textAlign: 'center',
-
     },
     titleTextInput: {
-        flexBasis: '70%', // Defina o valor desejado para a largura do título
+        flexBasis: '80%', // Defina o valor desejado para a largura do título
         textAlign: 'left',
         fontSize: 16,
         color: '#000',
@@ -294,22 +293,20 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     buttonSalvar: {
+        backgroundColor: '#598381',
         width: '100%',
+        padding: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 16,
-        height: 60,
         borderRadius: 10,
-        backgroundColor: '#598381',
-        marginBottom: 10,
-        marginHorizontal: 10,
+        marginVertical: 10
     },
     buttonAdicionar: {
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 16,
-        height: 60,
+        height: 50,
         borderRadius: 10,
         backgroundColor: '#598381',
         marginBottom: 10,
@@ -330,13 +327,12 @@ const styles = StyleSheet.create({
     },
     buttonCancelarEditMode: {
         backgroundColor: '#9F4A54',
+        width: '100%',
+        padding: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 16,
-        height: 60,
-        width: '100%',
         borderRadius: 10,
-        marginBottom: 10
+        marginBottom: 10,
     },
     buttonCancelar: {
         backgroundColor: '#9F4A54',
