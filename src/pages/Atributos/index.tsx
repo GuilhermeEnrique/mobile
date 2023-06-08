@@ -147,7 +147,7 @@ export default function Atributos({ route }: Props) {
                 <TextInput
                     style={styles.inputValue}
                     keyboardType="numeric"
-                    value={force}
+                    value={force.toString()}
                     onChangeText={setForce}
                     editable={editMode}
                 />
@@ -157,7 +157,7 @@ export default function Atributos({ route }: Props) {
                 <TextInput
                     style={styles.inputValue}
                     keyboardType="numeric"
-                    value={dexterity}
+                    value={dexterity.toString()}
                     onChangeText={setDexterity}
                     editable={editMode}
                 />
@@ -167,7 +167,7 @@ export default function Atributos({ route }: Props) {
                 <TextInput
                     style={styles.inputValue}
                     keyboardType="numeric"
-                    value={wisdom}
+                    value={wisdom.toString()}
                     onChangeText={setWisdom}
                     editable={editMode}
                 />
@@ -177,7 +177,7 @@ export default function Atributos({ route }: Props) {
                 <TextInput
                     style={styles.inputValue}
                     keyboardType="numeric"
-                    value={intelligence}
+                    value={intelligence.toString()}
                     onChangeText={setIntelligence}
                     editable={editMode}
                 />
@@ -187,7 +187,7 @@ export default function Atributos({ route }: Props) {
                 <TextInput
                     style={styles.inputValue}
                     keyboardType="numeric"
-                    value={charisma}
+                    value={charisma.toString()}
                     onChangeText={setCharisma}
                     editable={editMode}
                 />
@@ -197,7 +197,7 @@ export default function Atributos({ route }: Props) {
                 <TextInput
                     style={styles.inputValue}
                     keyboardType="numeric"
-                    value={constitution}
+                    value={constitution.toString()}
                     onChangeText={setConstitution}
                     editable={editMode}
                 />
