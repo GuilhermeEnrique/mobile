@@ -349,10 +349,11 @@ const styles = StyleSheet.create({
         borderColor: '#646262',
     },
     footer: {
+        width: '100%',
         backgroundColor: '#F8FAFF',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 20,
+        padding: 20,
     },
     ButtonSalvar: {
         width: '100%',

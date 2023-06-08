@@ -31,7 +31,9 @@ export type StackParmsList = {
     UpdatePersonagem: {
         id: string;
     },
-    Atributos: undefined;
+    Atributos: {
+        id: string;
+    },
 };
 
 const Stack = createNativeStackNavigator<StackParmsList>();
@@ -94,6 +96,7 @@ function AppRoutes() {
                 component={Atributos}
                 options={{ headerShown: false }}
             />
+            
         </Stack.Navigator>
     )
 }

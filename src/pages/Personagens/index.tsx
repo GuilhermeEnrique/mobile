@@ -123,8 +123,14 @@ export default function Personagens() {
     async function Personagem() {
         navigation.navigate('CreatePersonagem');
     }
+
     async function Atributos() {
-        navigation.navigate('Atributos');
+        setModalVisible(false);
+        if (selectedPersonagem) {
+            navigation.navigate('Atributos', {
+                id: selectedPersonagem.id,
+            });
+        }
     }
 
     const UpdatePersonagem = () => {

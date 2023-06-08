@@ -113,7 +113,6 @@ export default function CreatePersonagem() {
                 Alert.alert('Error', 'Não foi possível criar um personagem. Por favor, tente novamente mais tarde');
             } else {
                 Alert.alert('Sucesso', `Personagem ${name} criado`);
-
             }
         } catch (e) {
             Alert.alert('Error', 'Erro ao criar sum personagem.');
