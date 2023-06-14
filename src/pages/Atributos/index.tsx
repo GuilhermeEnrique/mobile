@@ -48,7 +48,6 @@ export default function Atributos({ route }: Props) {
         }
     };
 
-
     useEffect(() => {
         fetchAtributos();
     }, [])
@@ -87,6 +86,7 @@ export default function Atributos({ route }: Props) {
                     id: personagemId
                 }
             });
+            Alert.alert('Os atributos foram excluídos.');
             setEditMode(false);
             fetchAtributos();
         } catch (error) {
@@ -117,7 +117,6 @@ export default function Atributos({ route }: Props) {
         }
     };
 
-
     const handleAdicionar = () => {
         setEditMode(true);
     };
@@ -138,6 +137,11 @@ export default function Atributos({ route }: Props) {
         <View style={styles.container}>
             <View style={styles.title}>
                 <Text style={styles.titleText}>Atributos</Text>
+                {hasAtributos && (
+                    <TouchableOpacity style={styles.buttonDelete} onPress={handleDeletar}>
+                        <FontAwesome name="trash" size={30} color="white" />
+                    </TouchableOpacity>
+                )}
             </View>
             <Image
                 source={require('../Atributos/1484843.png')}
@@ -217,7 +221,7 @@ export default function Atributos({ route }: Props) {
                 <View style={styles.buttons}>
                     {hasAtributos ? (
                         <TouchableOpacity style={styles.buttonEdit} onPress={handleEditar}>
-                            <Text style={styles.textButton}>Editar</Text>
+                            <Text style={styles.textButton}>Editar atributos</Text>
                         </TouchableOpacity>
                     ) : (
                         <TouchableOpacity style={styles.buttonAdicionar} onPress={handleAdicionar}>
@@ -237,23 +241,32 @@ export default function Atributos({ route }: Props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
-        justifyContent: 'flex-start',
         backgroundColor: '#F8FAFF'
     },
     title: {
-        marginTop: 20,
-        alignContent: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'center',
+        paddingHorizontal: 20,
+        width: '100%',
     },
     image: {
         width: '40%',
         height: '20%',
     },
     titleText: {
-        textAlign: 'center',
+        flex: 1,
         fontSize: 25,
         fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    buttonDelete: {
+        marginTop: 20,
+        backgroundColor: '#9F4A54',
+        padding: 10,
+        borderRadius: 10,
     },
     input: {
         flexDirection: 'row',
@@ -268,9 +281,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     inputValue: {
+        backgroundColor: '#F8FAFF',
         width: '20%',
         fontSize: 20,
-        height: 50,
+        height: 46,
         textAlign: 'center',
     },
     titleTextInput: {

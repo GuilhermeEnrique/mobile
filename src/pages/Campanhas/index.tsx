@@ -82,7 +82,7 @@ export default function Campanhas() {
                         <FontAwesome name="chevron-down" size={20} color="black" style={styles.IconCampanha} />
                     </TouchableOpacity>
                 ))}
-            </View>
+            </View >
         );
     };
 
@@ -141,6 +141,7 @@ export default function Campanhas() {
             <View style={styles.title}>
                 <Text style={styles.titleText}>Suas campanhas</Text>
             </View>
+
             <View style={styles.campanhas}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
                     {renderCampanhas()}

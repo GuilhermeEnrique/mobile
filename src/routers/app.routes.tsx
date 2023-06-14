@@ -11,7 +11,8 @@ import Profile from '../pages/Profile';
 import Guia from '../pages/Guia';
 import UpdateCampanha from '../pages/UpdateCampanha';
 import UpdatePersonagem from '../pages/UpdatePersonagem';
-import Atributos from '../pages/Atributos'
+import Atributos from '../pages/Atributos';
+import Inventario from '../pages/Inventario';
 
 export type StackParmsList = {
     Dashboard: undefined;
@@ -32,6 +33,9 @@ export type StackParmsList = {
         id: string;
     },
     Atributos: {
+        id: string;
+    },
+    Inventario: {
         id: string;
     },
 };
@@ -96,7 +100,12 @@ function AppRoutes() {
                 component={Atributos}
                 options={{ headerShown: false }}
             />
-            
+            <Stack.Screen
+                name="Inventario"
+                component={Inventario}
+                options={{ headerShown: false }}
+            />
+
         </Stack.Navigator>
     )
 }

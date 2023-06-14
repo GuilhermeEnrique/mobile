@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
         margin: 10
     },
     imagem: {
-        width: '60%',
+        width: '70%',
         height: 160,
         borderRadius: 10,
         marginBottom: 10
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         marginVertical: 10,
         height: 210,
-        width: '80%',
+        width: '90%',
 
         borderRadius: 10,
         borderColor: 'dark',
@@ -194,11 +194,12 @@ const styles = StyleSheet.create({
     buttonsProfile: {
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        marginLeft: 25
+        justifyContent: 'space-around',
+        marginLeft: 25,
+        marginBottom: 25,
     },
     EditProfile: {
-        padding: 5,
+        paddingVertical: 20,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'transparent',
         height: 155,
-        width: '80%',
+        width: '90%',
         borderRadius: 20,
         marginBottom: 10,
     },

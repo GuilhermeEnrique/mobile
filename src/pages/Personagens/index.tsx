@@ -133,6 +133,15 @@ export default function Personagens() {
         }
     }
 
+    async function Inventario() {
+        setModalVisible(false);
+        if (selectedPersonagem) {
+            navigation.navigate('Inventario', {
+                id: selectedPersonagem.id,
+            });
+        }
+    }
+
     const UpdatePersonagem = () => {
         setModalVisible(false);
         if (selectedPersonagem) {
@@ -212,7 +221,7 @@ export default function Personagens() {
                                     <AntDesign name="edit" size={40} color="black" style={styles.iconEdit} />
                                     <Text style={styles.iconEdit}>Editar</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.modalCloseButton} onPress={closeModal}>
+                                <TouchableOpacity style={styles.modalCloseButton} onPress={Inventario}>
                                     <MaterialIcons name="inventory" size={40} color="black" style={styles.iconEdit} />
                                     <Text style={styles.iconEdit}>Inventário</Text>
                                 </TouchableOpacity>
