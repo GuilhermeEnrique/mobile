@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackParmsList } from '../../routers/app.routes';
 import { api } from '../../services/api';
 import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { useNavigation } from '@react-navigation/native';
 
 interface UserData {
     id: string;
@@ -12,6 +15,7 @@ interface UserData {
 }
 
 export default function Profile() {
+    const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
     const [id, setId] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -39,7 +43,7 @@ export default function Profile() {
         );
     };
 
-    const selectImageFromPicker  = async () => {
+    const selectImageFromPicker = async () => {
         const pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
@@ -218,7 +222,7 @@ export default function Profile() {
 
                 {!isEditing && (
                     <View style={styles.buttons}>
-                        <TouchableOpacity style={styles.resetPassword}>
+                        <TouchableOpacity style={styles.resetPassword} onPress={() => navigation.navigate('resetPassword')}>
                             <Text style={{ color: 'blue', fontSize: 16 }}>Esqueceu sua senha?</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.buttonEdit} onPress={handleEditPress}>
@@ -291,12 +295,16 @@ const styles = StyleSheet.create({
         width: '70%',
         height: 160,
         textAlign: 'justify',
+        borderBottomWidth: 3,
+        borderBottomColor: '#28AC92',
     },
     input: {
         backgroundColor: '#EDE8E8',
         padding: 13,
         width: '70%',
         height: 60,
+        borderBottomWidth: 3,
+        borderBottomColor: '#28AC92',
     },
     inputTitle: {
         textAlignVertical: 'center',
@@ -305,6 +313,10 @@ const styles = StyleSheet.create({
         padding: 13,
         width: '20%',
         height: 60,
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
+        borderBottomWidth: 3,
+        borderBottomColor: '#28AC92',
     },
     resetPassword: {
         alignItems: 'center',
@@ -326,15 +338,15 @@ const styles = StyleSheet.create({
     inputContainer: {
         flexDirection: 'row',
         width: '100%',
-        borderBottomWidth: 1,
-        borderBottomColor: '#28AC92',
+        borderRadius: 10,
+
         marginBottom: 10,
+
     },
     inputContainerBio: {
         flexDirection: 'row',
         width: '100%',
-        borderBottomWidth: 1,
-        borderBottomColor: '#28AC92',
+        borderRadius: 10,
         marginBottom: 10,
     },
     inputTextBiografia: {
@@ -344,18 +356,30 @@ const styles = StyleSheet.create({
         width: '20%',
         height: 160,
         textAlign: 'justify',
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
+        borderBottomWidth: 3,
+        borderBottomColor: '#28AC92',
     },
     icon: {
         backgroundColor: '#EDE8E8',
         paddingVertical: 18,
         width: '10%',
         height: 60,
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
+        borderBottomWidth: 3,
+        borderBottomColor: '#28AC92',
     },
     iconBiografia: {
         backgroundColor: '#EDE8E8',
         paddingVertical: 18,
         width: '10%',
         height: 160,
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
+        borderBottomWidth: 3,
+        borderBottomColor: '#28AC92',
     },
     buttons: {
         width: '100%',

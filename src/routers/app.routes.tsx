@@ -13,6 +13,7 @@ import UpdateCampanha from '../pages/UpdateCampanha';
 import UpdatePersonagem from '../pages/UpdatePersonagem';
 import Atributos from '../pages/Atributos';
 import Inventario from '../pages/Inventario';
+import resetPassword from '../pages/resetPassword';
 
 export type StackParmsList = {
     Dashboard: undefined;
@@ -38,6 +39,7 @@ export type StackParmsList = {
     Inventario: {
         id: string;
     },
+    resetPassword: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParmsList>();
@@ -78,6 +80,11 @@ function AppRoutes() {
             <Stack.Screen
                 name="Profile"
                 component={Profile}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="resetPassword"
+                component={resetPassword}
                 options={{ headerShown: false }}
             />
             <Stack.Screen

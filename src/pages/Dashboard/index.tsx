@@ -65,29 +65,29 @@ export default function Dashboard() {
         <SafeAreaView>
             <ScrollView>
                 <View style={styles.container}>
+                    <Text style={[styles.text, { textTransform: 'capitalize' }]} numberOfLines={2} ellipsizeMode="tail">
+                        Olá, {user.name}
+                    </Text>
                     <View style={styles.buttonProfile}>
-                        <Text style={[styles.text, { textTransform: 'capitalize' }]}>Olá, {user.name}</Text>
-                        <View style={styles.containerProfile}>
-                            <Image
-                                style={styles.imagem}
-                                source={profileImage ? { uri: profileImage } : require('../../assets/usuario.png')}
-                            />
-                            <View style={styles.buttonsProfile}>
-                                <TouchableOpacity
-                                    onPress={Profile}
-                                    style={styles.EditProfile}
-                                >
-                                    <FontAwesome name="edit" size={24} style={styles.icon} />
-                                    <Text style={styles.textEdit}>Editar Perfil</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={styles.EditProfile}
-                                    onPress={signOut}
-                                >
-                                    <FontAwesome name="sign-out" size={24} style={styles.icon} />
-                                    <Text style={styles.textEdit}>Sair da conta</Text>
-                                </TouchableOpacity>
-                            </View>
+                        <Image
+                            style={styles.imagem}
+                            source={profileImage ? { uri: profileImage } : require('../../assets/usuario.png')}
+                        />
+                        <View style={styles.buttonsProfile}>
+                            <TouchableOpacity
+                                onPress={Profile}
+                                style={styles.EditProfile}
+                            >
+                                <FontAwesome name="edit" size={24} style={styles.icon} />
+                                <Text style={styles.textEdit}>Editar Perfil</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.EditProfile}
+                                onPress={signOut}
+                            >
+                                <FontAwesome name="sign-out" size={24} style={styles.icon} />
+                                <Text style={styles.textEdit}>Sair da conta</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                     <TouchableOpacity style={styles.buttons} onPress={Campanhas}>
@@ -95,14 +95,14 @@ export default function Dashboard() {
                             style={styles.imagemButtons}
                             source={require('../../assets/mapa.png')}
                         />
-                        <Text style={styles.textButtons}>Campanha</Text>
+                        <Text style={styles.textButtons}>Campanhas</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttons} onPress={Personagens}>
                         <Image
                             style={styles.imagemButtons}
                             source={require('../../assets/personagem.png')}
                         />
-                        <Text style={styles.textButtons}>Ficha de personagem</Text>
+                        <Text style={styles.textButtons}>Personagens</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttons} onPress={Dados}>
                         <Image
@@ -116,7 +116,7 @@ export default function Dashboard() {
                             style={styles.imagemButtons}
                             source={require('../../assets/guia.png')}
                         />
-                        <Text style={styles.textButtons}>Guia de usuário</Text>
+                        <Text style={styles.textButtons}>Guias para usuários</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -133,28 +133,23 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8FAFF',
     },
     //Botão de perfil
-    containerProfile: {
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        flexDirection: 'row',
-    },
     text: {
+        textAlign: 'center',
         color: '#F8FAFF',
         fontSize: 20,
         fontWeight: 'bold',
         textShadowColor: '#000',
         textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 10,
-        margin: 10
+        marginVertical: 20
     },
     imagem: {
-        width: '70%',
-        height: 160,
+        width: '60%',
+        height: '90%',
         borderRadius: 10,
-        marginBottom: 10
     },
     buttonProfile: {
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
         marginVertical: 10,
