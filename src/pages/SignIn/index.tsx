@@ -62,9 +62,9 @@ export default function SignIn() {
                         <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={24} color="#000" />
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.resetPassword}>
+                {/* <TouchableOpacity style={styles.resetPassword}>
                     <Text style={{ color: 'blue', fontSize: 16 }}>Esqueceu sua senha?</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity style={styles.button} onPress={handleLogin}>
                     {loadingAuth ? (
                         <ActivityIndicator size={25} color='#fff' />

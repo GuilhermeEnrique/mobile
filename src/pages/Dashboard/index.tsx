@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     //Botões da pagina
     imagemButtons: {
         width: '100%',
-        height: 155,
+        height: 200,
         position: 'absolute',
         borderRadius: 10,
         borderWidth: 1,
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'transparent',
-        height: 155,
+        height: 200,
         width: '90%',
         borderRadius: 20,
         marginBottom: 10,

@@ -276,6 +276,7 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     subTitle: {
+        textAlign: 'center',
         textTransform: 'capitalize',
         fontSize: 20,
         marginTop: 25,
