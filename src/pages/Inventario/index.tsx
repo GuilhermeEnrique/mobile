@@ -231,107 +231,121 @@ export default function Inventario({ route }: Props) {
         }
     };
 
+    const handleDeleteAllItem = async () => {
+        try {
+            await api.delete(`/deleteAll-itens?personagemId=${id}`);
+            fetchItens();
+            Alert.alert('Sucesso', 'Inventário excluído com sucesso');
+        } catch (error) {
+            console.log('Erro ao apagar inventário:', error);
+            Alert.alert('Erro', 'Erro ao apagar inventário. Por favor, tente novamente mais tarde');
+        }
+    };
+
     return (
-            <View style={styles.container}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>Inventário</Text>
-                </View>
-                <View style={styles.inventario}>
-                    <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                        {renderItens()}
-                    </ScrollView>
-                </View>
-
-                <TouchableOpacity style={styles.buttonAdicionar} onPress={handleAdicionarItem} >
-                    <Text style={styles.textButton}>Adicionar item</Text>
-                </TouchableOpacity>
-
-
-                <Modal visible={modalVisible} animationType="slide">
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <Text style={styles.modalTitle}>Novo Item</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Nome"
-                                value={name}
-                                onChangeText={setName}
-                            />
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Tipo"
-                                value={type}
-                                onChangeText={setType}
-                            />
-                            <TextInput
-                                style={styles.InputDescription}
-                                multiline={true}
-                                numberOfLines={3}
-                                textAlignVertical="top"
-                                placeholder="Descrição"
-                                value={description}
-                                onChangeText={setDescription}
-                            />
-                            <TextInput
-                                style={styles.input}
-                                keyboardType="numeric"
-                                placeholder="Quantidade"
-                                value={amount}
-                                onChangeText={setAmount}
-                            />
-                            <TouchableOpacity style={styles.modalButton} onPress={handleSalvarItem}>
-                                <Text style={styles.modalEdit} >Salvar item</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.modalButton} onPress={handleFecharModal}>
-                                <Text style={styles.modalCancelar}>Cancelar</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </Modal>
-
-                <Modal visible={modalEdit} animationType="slide">
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <Text style={styles.modalTitle}>Atualizar item</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Nome"
-                                value={name}
-                                onChangeText={setName}
-                            />
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Tipo"
-                                value={type}
-                                onChangeText={setType}
-                            />
-                            <TextInput
-                                style={styles.InputDescription}
-                                multiline={true}
-                                numberOfLines={3}
-                                textAlignVertical="top"
-                                placeholder="Descrição"
-                                value={description}
-                                onChangeText={setDescription}
-                            />
-                            <TextInput
-                                style={styles.input}
-                                keyboardType="numeric"
-                                placeholder="Quantidade"
-                                value={amount.toString()}
-                                onChangeText={setAmount}
-                            />
-                            <TouchableOpacity style={styles.modalButton} onPress={handleUpdateItem}>
-                                <Text style={styles.modalEdit}>Atualizar item</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.modalButton} onPress={handleFecharModal}>
-                                <Text style={styles.modalCancelar}>Cancelar</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </Modal>
-                {renderModalView()}
+        <View style={styles.container}>
+            <View style={styles.titleContainer}>
+                <Text style={styles.titleText}>Inventário</Text>
             </View>
+            <View style={styles.inventario}>
+                <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                    {renderItens()}
+                </ScrollView>
+            </View>
+
+            <TouchableOpacity style={styles.buttonAdicionar} onPress={handleAdicionarItem} >
+                <Text style={styles.textButton}>Adicionar item</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonDelete} onPress={handleDeleteAllItem} >
+                <Text style={styles.textButton}>Deletar todo inventário</Text>
+            </TouchableOpacity>
+
+
+            <Modal visible={modalVisible} animationType="slide">
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Novo Item</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Nome"
+                            value={name}
+                            onChangeText={setName}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Tipo"
+                            value={type}
+                            onChangeText={setType}
+                        />
+                        <TextInput
+                            style={styles.InputDescription}
+                            multiline={true}
+                            numberOfLines={3}
+                            textAlignVertical="top"
+                            placeholder="Descrição"
+                            value={description}
+                            onChangeText={setDescription}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            keyboardType="numeric"
+                            placeholder="Quantidade"
+                            value={amount}
+                            onChangeText={setAmount}
+                        />
+                        <TouchableOpacity style={styles.modalButton} onPress={handleSalvarItem}>
+                            <Text style={styles.modalEdit} >Salvar item</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.modalButton} onPress={handleFecharModal}>
+                            <Text style={styles.modalCancelar}>Cancelar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal visible={modalEdit} animationType="slide">
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Atualizar item</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Nome"
+                            value={name}
+                            onChangeText={setName}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Tipo"
+                            value={type}
+                            onChangeText={setType}
+                        />
+                        <TextInput
+                            style={styles.InputDescription}
+                            multiline={true}
+                            numberOfLines={3}
+                            textAlignVertical="top"
+                            placeholder="Descrição"
+                            value={description}
+                            onChangeText={setDescription}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            keyboardType="numeric"
+                            placeholder="Quantidade"
+                            value={amount.toString()}
+                            onChangeText={setAmount}
+                        />
+                        <TouchableOpacity style={styles.modalButton} onPress={handleUpdateItem}>
+                            <Text style={styles.modalEdit}>Atualizar item</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.modalButton} onPress={handleFecharModal}>
+                            <Text style={styles.modalCancelar}>Cancelar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            {renderModalView()}
+        </View>
     );
 }
 
@@ -424,6 +438,17 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 10,
         backgroundColor: '#598381',
+        marginBottom: 10,
+        marginHorizontal: 10,
+    },
+    buttonDelete: {
+        width: '90%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 16,
+        height: 50,
+        borderRadius: 10,
+        backgroundColor: '#9F4A54',
         marginBottom: 20,
         marginHorizontal: 10,
     },
