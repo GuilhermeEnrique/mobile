@@ -20,7 +20,7 @@ export default function ResetPasswordScreen() {
             newPassword: newPassword,
         }
         try {
-            const response = await api.put('/reset-password', data);
+            await api.put('/reset-password', data);
             Alert.alert('Senha atualizada com sucesso.');
             setNewPassword('');
             setOldPassword('');
