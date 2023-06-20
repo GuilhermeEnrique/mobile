@@ -340,7 +340,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         borderRadius: 10,
-
         marginBottom: 10,
 
     },

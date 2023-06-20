@@ -16,8 +16,8 @@ export default function ResetPasswordScreen() {
     const handleResetPassword = async () => {
         const data = {
             email: email,
-            newPassword: newPassword,
             oldPassword: oldPassword,
+            newPassword: newPassword,
         }
         try {
             const response = await api.put('/reset-password', data);
@@ -69,8 +69,13 @@ export default function ResetPasswordScreen() {
                     secureTextEntry={!showPassword}
                 />
                 <TouchableOpacity style={styles.buttonEye} onPress={toggleShowPassword}>
-                    <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={24} color="#000" />
-                    <Text>Visualizar senhas</Text>
+                    <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={24} color="#fff" />
+                    {!showPassword && (
+                        <Text style={styles.textButton}>Visualizar senhas</Text>
+                    )}
+                    {showPassword && (
+                        <Text style={styles.textButton}>Ocultar senhas</Text>
+                    )}
                 </TouchableOpacity>
             </View>
             <View style={styles.button}>
@@ -120,7 +125,7 @@ const styles = StyleSheet.create({
     },
     buttonEye: {
         justifyContent: 'center',
-        backgroundColor: '#28AC92',
+        backgroundColor: '#598381',
         marginLeft: 5,
         alignItems: 'center',
         width: '90%',

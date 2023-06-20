@@ -45,7 +45,6 @@ export default function Home() {
                         <FontAwesome name="copyright" size={20} color="black" />
                         <Text style={styles.textCopyright}>Dice-roll 2023</Text>
                     </View>
-
                 </View>
             </View>
         </ImageBackground >

@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Alert, ScrollView, StatusBar, SafeAreaView } from "react-native";
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { StackParmsList } from "../../routers/app.routes";
-import { AuthContext } from "../../contexts/AuthContext";
 import { RouteProp, useIsFocused, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { api } from '../../services/api';
@@ -25,7 +24,6 @@ interface Inventario {
 
 export default function Inventario({ route }: Props) {
     const { id } = route.params;
-    const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
     const [itens, setItens] = useState<Inventario[]>([]);
     const [editItem, setEditItem] = useState<Inventario | null>(null);
 
@@ -73,7 +71,6 @@ export default function Inventario({ route }: Props) {
                 console.log(response.data.error)
                 Alert.alert('Error', 'Não foi possível adicionar um item. Por favor, tente novamente mais tarde');
             } else {
-                // Fecha a modal
                 setName('');
                 setType('');
                 setDescription('');
@@ -149,6 +146,7 @@ export default function Inventario({ route }: Props) {
                 <Modal visible={modalView} animationType="slide">
                     <View style={styles.modalContainerEdit}>
                         <View style={styles.modalContentEdit}>
+                            <MaterialIcons name="inventory" size={50} color="black" style={styles.iconModalView} />
                             <Text style={styles.modalTitle}>Detalhes do Item</Text>
                             <Text style={styles.ModalEditElement}>Nome: {viewItem.name}</Text>
                             <Text style={styles.ModalEditElement}>Tipo: {viewItem.type}</Text>
@@ -260,7 +258,6 @@ export default function Inventario({ route }: Props) {
                 <Text style={styles.textButton}>Deletar todo inventário</Text>
             </TouchableOpacity>
 
-
             <Modal visible={modalVisible} animationType="slide">
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
@@ -332,7 +329,7 @@ export default function Inventario({ route }: Props) {
                             style={styles.input}
                             keyboardType="numeric"
                             placeholder="Quantidade"
-                            value={amount.toString()}
+                            value={amount}
                             onChangeText={setAmount}
                         />
                         <TouchableOpacity style={styles.modalButton} onPress={handleUpdateItem}>
@@ -348,7 +345,6 @@ export default function Inventario({ route }: Props) {
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -383,7 +379,6 @@ const styles = StyleSheet.create({
         color: '#9F4A54',
         textAlign: 'center',
         justifyContent: 'center',
-
         textShadowColor: '#000',
         textShadowOffset: { width: 3, height: 3 },
         textShadowRadius: 2,
@@ -408,7 +403,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         margin: 10,
-
         borderWidth: 1,
         borderColor: 'black',
         borderRadius: 10,
@@ -476,7 +470,7 @@ const styles = StyleSheet.create({
     },
     modalTitle: {
         textAlign: 'center',
-        fontSize: 20,
+        fontSize: 25,
         fontWeight: 'bold',
         marginBottom: 20,
     },
@@ -492,6 +486,7 @@ const styles = StyleSheet.create({
     },
     InputDescription: {
         backgroundColor: '#EDE8E8',
+        textAlign: 'justify',
         padding: 13,
         width: '100%',
         height: 140,
@@ -536,9 +531,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: '90%',
     },
+    iconModalView: {
+        textAlign: 'center',
+        justifyContent: 'center',
+    },
     ModalEditElement: {
         textAlign: 'justify',
         fontSize: 18,
-        marginBottom: 10,
+        marginBottom: 5,
     }
 })

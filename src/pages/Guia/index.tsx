@@ -114,8 +114,8 @@ const styles = StyleSheet.create({
     },
     imagemButtons: {
         borderRadius: 30,
-        borderWidth: 1,
-        borderColor: '#000',
+        borderWidth: 4,
+        borderColor: '#28AC92',
         margin: 10,
         alignSelf: 'center',
     },

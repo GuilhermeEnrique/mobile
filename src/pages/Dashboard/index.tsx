@@ -65,8 +65,8 @@ export default function Dashboard() {
         <SafeAreaView>
             <ScrollView>
                 <View style={styles.container}>
-                    <Text style={[styles.text, { textTransform: 'capitalize' }]} numberOfLines={2} ellipsizeMode="tail">
-                        Olá, {user.name}
+                    <Text style={styles.text} numberOfLines={2} ellipsizeMode="tail">
+                        Bem-vindo, {user.name}
                     </Text>
                     <View style={styles.buttonProfile}>
                         <Image
@@ -118,7 +118,15 @@ export default function Dashboard() {
                         />
                         <Text style={styles.textButtons}>Guias para usuários</Text>
                     </TouchableOpacity>
+                    <Image
+                        style={styles.logo}
+                        source={require('../../assets/Logo.png')} />
+                    <View style={styles.copyright}>
+                        <FontAwesome name="copyright" size={20} color="black" />
+                        <Text style={styles.textCopyright}>Dice-roll 2023</Text>
+                    </View>
                 </View>
+
             </ScrollView>
         </SafeAreaView>
     );
@@ -132,7 +140,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: '#F8FAFF',
     },
-    //Botão de perfil
     text: {
         textAlign: 'center',
         color: '#F8FAFF',
@@ -141,19 +148,15 @@ const styles = StyleSheet.create({
         textShadowColor: '#000',
         textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 10,
-        marginVertical: 20
+        marginVertical: 10
     },
-    imagem: {
-        width: '60%',
-        height: '90%',
-        borderRadius: 10,
-    },
+    //Botão de perfil
     buttonProfile: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
         marginVertical: 10,
-        height: 210,
+        height: 200,
         width: '90%',
 
         borderRadius: 10,
@@ -170,43 +173,39 @@ const styles = StyleSheet.create({
         },
         elevation: 5,
     },
+    imagem: {
+        width: '70%',
+        height: '90%',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#000'
+    },
     icon: {
         color: '#000',
         backgroundColor: '#fff',
+        borderWidth: 1,
         padding: 8,
         borderRadius: 100,
         alignItems: 'center',
         justifyContent: 'center'
     },
     textEdit: {
-        fontSize: 12,
+        fontSize: 14,
         marginTop: 5,
-        color: '#F8FAFF',
-        textShadowColor: '#000',
-        textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 10,
+        color: '#000',
     },
     buttonsProfile: {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-around',
-        marginLeft: 25,
-        marginBottom: 25,
     },
     EditProfile: {
         paddingVertical: 20,
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
     },
     //Botões da pagina
-    imagemButtons: {
-        width: '100%',
-        height: 200,
-        position: 'absolute',
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: '#000',
-    },
     buttons: {
         flex: 1,
         alignItems: 'center',
@@ -217,6 +216,14 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginBottom: 10,
     },
+    imagemButtons: {
+        width: '100%',
+        height: 200,
+        position: 'absolute',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#000',
+    },
     textButtons: {
         color: 'white',
         fontWeight: 'bold',
@@ -226,5 +233,21 @@ const styles = StyleSheet.create({
         textShadowColor: '#000',
         textShadowOffset: { width: 2, height: 2 },
         textShadowRadius: 10,
+    },
+    logo: {
+        width: 150,
+        height: 150,
+    },
+    copyright: {
+        justifyContent: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    textCopyright: {
+        color: '#000',
+        fontSize: 17,
+        fontWeight: '600',
+        marginLeft: 5
     }
 })

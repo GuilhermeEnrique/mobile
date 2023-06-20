@@ -85,6 +85,10 @@ export default function SingUp() {
                     <Text style={styles.textRegister}> Entrar</Text>
                 </TouchableOpacity>
             </View>
+            <View style={styles.copyright}>
+                <FontAwesome name="copyright" size={20} color="black" />
+                <Text style={styles.textCopyright}>Dice-roll 2023</Text>
+            </View>
         </View>
     )
 }
@@ -141,7 +145,7 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     inputContainer: {
-        marginBottom: 300,
+        marginBottom: 50,
     },
     button: {
         marginTop: 20,
@@ -166,5 +170,16 @@ const styles = StyleSheet.create({
     textRegister: {
         color: 'blue',
         fontSize: 17
+    },
+    copyright: {
+        justifyContent: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    textCopyright: {
+        color: '#000',
+        fontSize: 17,
+        fontWeight: '600',
+        marginLeft: 5
     }
 });

@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8FAFF'
     },
     title: {
-        fontSize: 20,
+        fontSize: 25,
         marginTop: 5,
         fontWeight: 'bold',
         color: '#000',
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#646262'
+        borderColor: '#646262',
     },
     InputDescription: {
         backgroundColor: '#EDE8E8',
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
         borderColor: '#646262'
     },
     buttons: {
-        width: '90%',
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         margin: 25,

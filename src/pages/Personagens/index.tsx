@@ -31,6 +31,7 @@ export default function Personagens() {
     const [personagens, setPersonagens] = useState<Personagens[]>([]);
     const [selectedPersonagem, setSelectedPersonagem] = useState<Personagens | null>(null);
     const [personagemImage, setPersonagemImage] = useState('');
+    const [personagensImages, setPersonagensImages] = useState<Record<string, string>>({});
     const [modalVisible, setModalVisible] = useState(false);
     const [deletedPersonagemId, setDeletedPersonagemId] = useState<string | null>(null);
     const isFocused = useIsFocused();
@@ -40,11 +41,11 @@ export default function Personagens() {
         fetchPersonagens();
     }, [isFocused, deletedPersonagemId]);
 
-
     const fetchPersonagens = async () => {
         try {
             const response = await api.get('/listen-personagens');
-            setPersonagens(response.data);
+            const fetchedPersonagens = response.data;
+            setPersonagens(fetchedPersonagens);
         } catch (error) {
             console.log('Error fetching campanhas:', error);
         }
@@ -61,8 +62,6 @@ export default function Personagens() {
                     const imageURL = `${api.defaults.baseURL}/uploads/character/${imageFileName}`;
                     setPersonagemImage(imageURL);
                 }
-            } else {
-                // console.log('nao foi possivel puxar a imagem')
             }
         } catch (error) {
             console.log(error);
@@ -289,10 +288,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         margin: 10,
-
         borderWidth: 1,
         borderColor: 'black',
         borderRadius: 10,
+    },
+    Image: {
+        width: '100%',
+        height: 160,
+        position: 'absolute',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#000',
     },
     titleText: {
         textAlign: 'center',
@@ -336,6 +342,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#255273',
         marginBottom: 25,
     },
+
     IconNewPerson: {
         color: '#F8FAFF'
     },
@@ -381,16 +388,18 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     modalNumber: {
-        width: '90%',
+        width: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-around',
     },
     modalLife: {
+        textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 20,
         marginBottom: 10,
     },
     modalLevel: {
+        textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 20,
         marginBottom: 10,

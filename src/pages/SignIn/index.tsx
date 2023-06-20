@@ -76,6 +76,10 @@ export default function SignIn() {
                     <Text style={{ color: '#000', fontSize: 16 }}>Não possui uma conta?</Text><Text style={styles.textRegister}> Registre-se</Text>
                 </TouchableOpacity>
             </View>
+            <View style={styles.copyright}>
+                <FontAwesome name="copyright" size={20} color="black" />
+                <Text style={styles.textCopyright}>Dice-roll 2023</Text>
+            </View>
         </View>
     )
 }
@@ -133,7 +137,7 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     inputContainer: {
-        marginBottom: 300,
+        marginBottom: 20,
     },
     resetPassword: {
         marginTop: 13,
@@ -151,7 +155,7 @@ const styles = StyleSheet.create({
     textButton: {
         color: '#F8FAFF',
         fontSize: 17,
-        fontWeight: '600'
+        fontWeight: '500'
     },
     register: {
         flexDirection: 'row',
@@ -162,5 +166,16 @@ const styles = StyleSheet.create({
     textRegister: {
         color: 'blue',
         fontSize: 17
+    },
+    copyright: {
+        justifyContent: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    textCopyright: {
+        color: '#000',
+        fontSize: 17,
+        fontWeight: '600',
+        marginLeft: 5
     }
 })

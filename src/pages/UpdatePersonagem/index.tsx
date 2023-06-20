@@ -285,10 +285,10 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     title: {
-        fontSize: 20,
+        fontSize: 25,
         fontWeight: 'bold',
         color: '#000',
-        marginVertical: 20,
+        marginVertical: 10,
     },
     scrollView: {
         flex: 1,
