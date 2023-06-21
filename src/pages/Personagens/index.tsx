@@ -175,7 +175,7 @@ export default function Personagens() {
             {selectedPersonagem && (
                 <Modal
                     visible={modalVisible}
-                    animationType="slide"
+                    animationType="fade"
                     transparent={true}
                     onRequestClose={() => setModalVisible(false)}
                 >
@@ -229,7 +229,6 @@ export default function Personagens() {
                                     <Text style={styles.iconFechar}>Fechar</Text>
                                 </TouchableOpacity>
                             </View>
-
                         </View>
                     </View>
                 </Modal>

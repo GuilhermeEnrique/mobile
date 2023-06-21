@@ -154,7 +154,7 @@ export default function Campanhas() {
             </TouchableOpacity>
 
             {selectedCampanha && (
-                <Modal visible={isModalVisible} animationType="slide" transparent>
+                <Modal visible={isModalVisible} animationType="fade" transparent>
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
                             <Image

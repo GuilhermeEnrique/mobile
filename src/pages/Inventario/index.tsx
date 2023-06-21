@@ -149,7 +149,7 @@ export default function Inventario({ route }: Props) {
     const renderModalView = () => {
         if (viewItem) {
             return (
-                <Modal visible={modalView} animationType="slide">
+                <Modal visible={modalView} animationType="fade" transparent={true}>
                     <View style={styles.modalContainerEdit}>
                         <View style={styles.modalContentEdit}>
                             <MaterialIcons name="inventory" size={50} color="black" style={styles.iconModalView} />
@@ -175,7 +175,6 @@ export default function Inventario({ route }: Props) {
         setType(item.type);
         setDescription(item.description);
         setAmount(item.amount);
-
         // Abra a modal de edição
         setModalEdit(true);
     };
@@ -213,7 +212,6 @@ export default function Inventario({ route }: Props) {
             Alert.alert('Error', 'Erro ao atualizar o item!');
             console.log(error);
         }
-
         setName('');
         setType('');
         setDescription('');
@@ -267,7 +265,7 @@ export default function Inventario({ route }: Props) {
                     <Text style={styles.textButton}>Deletar todo inventário</Text>
                 </TouchableOpacity>
             )}
-            <Modal visible={modalVisible} animationType="slide">
+            <Modal visible={modalVisible} animationType="fade" transparent={true}>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>Novo Item</Text>
@@ -309,7 +307,7 @@ export default function Inventario({ route }: Props) {
                 </View>
             </Modal>
 
-            <Modal visible={modalEdit} animationType="slide">
+            <Modal visible={modalEdit} animationType="fade" transparent={true}>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>Atualizar item</Text>

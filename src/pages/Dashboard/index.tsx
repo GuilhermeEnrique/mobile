@@ -44,26 +44,6 @@ export default function Dashboard() {
         }
     }
 
-    async function Campanhas() {
-        navigation.navigate('Campanhas');
-    }
-
-    async function Personagens() {
-        navigation.navigate('Personagens');
-    }
-
-    async function Dados() {
-        navigation.navigate('Dice');
-    }
-
-    async function Profile() {
-        navigation.navigate('Profile');
-    }
-
-    async function Guia() {
-        navigation.navigate('Guia');
-    }
-
     function handleDownloadPDF(bookType: BookType) {
         let pdfUrl = '';
 
@@ -94,7 +74,7 @@ export default function Dashboard() {
                         />
                         <View style={styles.buttonsProfile}>
                             <TouchableOpacity
-                                onPress={Profile}
+                                onPress={() => navigation.navigate('Profile')}
                                 style={styles.EditProfile}
                             >
                                 <FontAwesome name="edit" size={24} style={styles.icon} />
@@ -109,28 +89,28 @@ export default function Dashboard() {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <TouchableOpacity style={styles.buttons} onPress={Campanhas}>
+                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('Campanhas')}>
                         <Image
                             style={styles.imagemButtons}
                             source={require('../../assets/mapa.png')}
                         />
                         <Text style={styles.textButtons}>Campanhas</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttons} onPress={Personagens}>
+                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('Personagens')}>
                         <Image
                             style={styles.imagemButtons}
                             source={require('../../assets/personagem.png')}
                         />
                         <Text style={styles.textButtons}>Personagens</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttons} onPress={Dados}>
+                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('Dice')}>
                         <Image
                             style={styles.imagemButtons}
                             source={require('../../assets/dados.png')}
                         />
                         <Text style={styles.textButtons}>Dados</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttons} onPress={Guia}>
+                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('Guia')}>
                         <Image
                             style={styles.imagemButtons}
                             source={require('../../assets/guia.png')}
@@ -170,7 +150,7 @@ export default function Dashboard() {
                     </View>
                 </View>
             </Modal>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 }
 
@@ -257,7 +237,6 @@ const styles = StyleSheet.create({
         width: '90%',
         borderRadius: 10,
         marginBottom: 10,
-
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowRadius: 0,
