@@ -156,8 +156,8 @@ export default function UpdatePersonagem({ route }: Props) {
 
         formData.append('name', name);
         formData.append('description', description);
-        formData.append('life', `${life}`);
-        formData.append('level', `${level}`);
+        formData.append('life', life);
+        formData.append('level', level);
         formData.append('personality', personality);
         formData.append('classe', classe);
         formData.append('race', race);
