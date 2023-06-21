@@ -248,16 +248,18 @@ export default function UpdatePersonagem({ route }: Props) {
                     value={classe}
                     onChangeText={(text) => setClasse(text)}
                 />
-                <RNPickerSelect
-                    value={campanhasId}
-                    onValueChange={(value) => setCampanha(value)}
-                    placeholder={{
-                        label: personagemCampanha,
-                        value: personagemCampanha,
-                        color: '#646262'
-                    }}
-                    items={campanhas}
-                />
+                <View style={styles.picker}>
+                    <RNPickerSelect
+                        value={campanhasId}
+                        onValueChange={(value) => setCampanha(value)}
+                        placeholder={{
+                            label: personagemCampanha,
+                            value: personagemCampanha,
+                            color: '#646262'
+                        }}
+                        items={campanhas}
+                    />
+                </View>
             </ScrollView>
             <View style={styles.footer}>
                 <TouchableOpacity style={styles.ButtonSalvar} onPress={UpdatePersonagem}>
@@ -326,6 +328,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#646262',
+    },
+    picker: {
+        borderWidth: 1,
+        borderColor: '#646262',
+        backgroundColor: '#EDE8E8',
+        borderRadius: 10,
+        marginBottom: 10
     },
     input: {
         backgroundColor: '#EDE8E8',

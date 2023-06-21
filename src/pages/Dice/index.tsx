@@ -58,30 +58,33 @@ export default function Dados() {
                     style={styles.image}
                     source={require('../../assets/dice.png')}
                 />
+                <View style={styles.picker}>
+                    <RNPickerSelect
+                        value={type}
+                        onValueChange={(value) => setType(value)}
+                        items={[
+                            { label: 'D4 (4 lados)', value: '4' },
+                            { label: 'D6 (6 lados)', value: '6' },
+                            { label: 'D8 (8 lados)', value: '8' },
+                            { label: 'D12 (12 lados)', value: '12' },
+                            { label: 'D12 (12 lados)', value: '12' },
+                            { label: 'D20 (20 lados) ', value: '20' },
+                        ]}
+                        placeholder={{ label: 'Escolha um tipo de dado', value: null }}
+                    />
+                </View>
 
-                <RNPickerSelect
-                    value={type}
-                    onValueChange={(value) => setType(value)}
-                    items={[
-                        { label: 'D4 (4 lados)', value: '4' },
-                        { label: 'D6 (6 lados)', value: '6' },
-                        { label: 'D8 (8 lados)', value: '8' },
-                        { label: 'D12 (12 lados)', value: '12' },
-                        { label: 'D12 (12 lados)', value: '12' },
-                        { label: 'D20 (20 lados) ', value: '20' },
-                    ]}
-                    placeholder={{ label: 'Escolha um tipo de dado', value: null }}
-                />
                 <TextInput
                     keyboardType='numeric'
                     placeholder='A quantidade de dados'
+                    placeholderTextColor="#c7c7cd"
                     style={styles.qntDados}
                     value={quantity}
                     onChangeText={(text) => setQuantity(text)}
                 />
                 <ScrollView style={styles.scrollView}>
                     {results.length > 0 ? (
-                        <View style={styles.ResultadosDados}>   
+                        <View style={styles.ResultadosDados}>
                             {results.map((result, index) => (
                                 <Text key={index}>{index + 1}º Dado = {result}</Text>
                             ))}
@@ -134,7 +137,9 @@ const styles = StyleSheet.create({
     },
     qntDados: {
         backgroundColor: '#EDE8E8',
-        padding: 13,
+        paddingHorizontal: 15,
+        color: '#000',
+        fontSize: 16,
         width: '100%',
         height: 50,
         marginBottom: 10,
@@ -145,7 +150,7 @@ const styles = StyleSheet.create({
     ButtonDados: {
         width: '100%',
         backgroundColor: '#255273',
-        padding: 12,
+        paddingHori: 12,
         borderRadius: 10,
         marginBottom: 10,
         height: 50,
@@ -163,7 +168,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginLeft: 10
     },
-    textSoma:{
+    textSoma: {
         fontWeight: 'bold'
     },
     buttonContent: {
@@ -192,5 +197,12 @@ const styles = StyleSheet.create({
         padding: 13,
         width: '100%',
     },
+    picker: {
+        borderWidth: 1,
+        borderColor: '#646262',
+        backgroundColor: '#EDE8E8',
+        borderRadius: 10,
+        marginBottom: 10
+    }
 })
 

@@ -130,71 +130,71 @@ export default function CreatePersonagem() {
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.containerCenter}>
-                <Text style={styles.title}>
-                    Criar um personagem
-                </Text>
-                <View style={styles.Inputs}>
-                    <TouchableOpacity style={styles.avatarButton} onPress={handleChooseImage}>
-                        {personagemImage ? (
-                            <Image source={{ uri: personagemImage }} style={styles.preview} />
-                        ) : (
-                            <><FontAwesome name="camera" size={24} color="black" /><Text>Selecionar avatar</Text></>
-                        )}
-                    </TouchableOpacity>
-                    <View style={styles.InputNumber}>
-                        <TextInput
-                            placeholder='Pontos de vida'
-                            style={styles.InputL}
-                            value={life}
-                            onChangeText={(text) => setLife(text)}
-                            keyboardType='numeric'
-                        />
-                        <TextInput
-                            placeholder='Nível'
-                            style={styles.InputLevel}
-                            value={level}
-                            onChangeText={(text) => setLevel(text)}
-                            keyboardType='numeric'
-                        />
-                    </View>
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <Text style={styles.title}>Criar um personagem</Text>
+            </View>
+            <ScrollView style={styles.scrollView}>
+                <TouchableOpacity style={styles.avatarButton} onPress={handleChooseImage}>
+                    {personagemImage ? (
+                        <Image source={{ uri: personagemImage }} style={styles.preview} />
+                    ) : (
+                        <><FontAwesome name="camera" size={24} color="black" /><Text>Selecionar avatar</Text></>
+                    )}
+                </TouchableOpacity>
+                <View style={styles.InputNumber}>
                     <TextInput
-                        placeholder='Nome do personagem'
-                        style={styles.Input}
-                        value={name}
-                        onChangeText={(text) => setName(text)}
+                        placeholder='Pontos de vida'
+                        style={styles.InputL}
+                        value={life}
+                        onChangeText={(text) => setLife(text)}
+                        keyboardType='numeric'
                     />
                     <TextInput
-                        placeholder='Descrição'
-                        style={styles.InputDescription}
-                        multiline={true}
-                        numberOfLines={3}
-                        textAlignVertical="top"
-                        value={description}
-                        onChangeText={(text) => setDescription(text)}
+                        placeholder='Nível'
+                        style={styles.InputLevel}
+                        value={level}
+                        onChangeText={(text) => setLevel(text)}
+                        keyboardType='numeric'
                     />
-                    <TextInput
-                        placeholder='Personalidade'
-                        style={styles.InputDescription}
-                        multiline={true}
-                        numberOfLines={3}
-                        textAlignVertical="top"
-                        value={personality}
-                        onChangeText={(text) => setPersonality(text)}
-                    />
-                    <TextInput
-                        placeholder='Raça'
-                        style={styles.Input}
-                        value={race}
-                        onChangeText={(text) => setRace(text)}
-                    />
-                    <TextInput
-                        placeholder='Classe'
-                        style={styles.Input}
-                        value={classe}
-                        onChangeText={(text) => setClasse(text)}
-                    />
+                </View>
+                <TextInput
+                    placeholder='Nome do personagem'
+                    style={styles.Input}
+                    value={name}
+                    onChangeText={(text) => setName(text)}
+                />
+                <TextInput
+                    placeholder='Descrição'
+                    style={styles.InputDescription}
+                    multiline={true}
+                    numberOfLines={3}
+                    textAlignVertical="top"
+                    value={description}
+                    onChangeText={(text) => setDescription(text)}
+                />
+                <TextInput
+                    placeholder='Personalidade'
+                    style={styles.InputDescription}
+                    multiline={true}
+                    numberOfLines={3}
+                    textAlignVertical="top"
+                    value={personality}
+                    onChangeText={(text) => setPersonality(text)}
+                />
+                <TextInput
+                    placeholder='Raça'
+                    style={styles.Input}
+                    value={race}
+                    onChangeText={(text) => setRace(text)}
+                />
+                <TextInput
+                    placeholder='Classe'
+                    style={styles.Input}
+                    value={classe}
+                    onChangeText={(text) => setClasse(text)}
+                />
+                <View style={styles.picker}>
                     <RNPickerSelect
                         value={campanhasId}
                         onValueChange={(value) => setCampanha(value)}
@@ -207,45 +207,45 @@ export default function CreatePersonagem() {
                         ]}
                     />
                 </View>
-                <View style={styles.buttons}>
-                    <TouchableOpacity style={styles.buttonSalvar} onPress={openPersonagem}>
-                        <Text style={styles.textSalvar}>Salvar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonCancelar} onPress={Personagens}>
-                        <Text style={styles.textCancelar}>Cancelar</Text>
-                    </TouchableOpacity>
-                </View>
+            </ScrollView>
+            <View style={styles.footer}>
+                <TouchableOpacity style={styles.buttonSalvar} onPress={openPersonagem}>
+                    <Text style={styles.textSalvar}>Salvar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonCancelar} onPress={Personagens}>
+                    <Text style={styles.textCancelar}>Cancelar</Text>
+                </TouchableOpacity>
             </View>
-        </ScrollView >
-
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         width: '100%',
+        flex: 1,
         backgroundColor: '#F8FAFF'
     },
-    containerCenter: {
-        flex: 1,
+    header: {
+        backgroundColor: '#F8FAFF',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: '#F8FAFF'
+        justifyContent: 'center',
+        paddingVertical: 5,
     },
     title: {
         fontSize: 25,
-        margin: 20,
         fontWeight: 'bold',
         color: '#000',
+        marginVertical: 10,
     },
-    Inputs: {
-        width: '90%',
-        alignItems: 'center'
+    scrollView: {
+        flex: 1,
+        backgroundColor: '#F8FAFF',
+        paddingHorizontal: 10,
     },
     avatarButton: {
         width: '100%',
-        height: 120,
+        height: 280,
         marginBottom: 8,
         backgroundColor: '#EDE8E8',
         borderWidth: 1,
@@ -256,9 +256,18 @@ const styles = StyleSheet.create({
     },
     preview: {
         width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-        borderRadius: 20,
+        height: 280,
+        marginBottom: 10,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#646262',
+    },
+    picker: {
+        borderWidth: 1,
+        borderColor: '#646262',
+        backgroundColor: '#EDE8E8',
+        borderRadius: 10,
+        marginBottom: 10
     },
     Input: {
         backgroundColor: '#EDE8E8',
@@ -303,13 +312,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#646262',
         marginLeft: 10,
-    }
-    ,
-    buttons: {
-        width: '90%',
+    },
+    footer: {
+        width: '100%',
+        backgroundColor: '#F8FAFF',
         alignItems: 'center',
         justifyContent: 'center',
-        margin: 25,
+        padding: 20,
     },
     buttonSalvar: {
         width: '100%',
