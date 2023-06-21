@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { api } from '../../services/api';
 import { FontAwesome } from '@expo/vector-icons';
@@ -8,23 +8,39 @@ import { StackParmsList } from '../../routers/app.routes';
 
 export default function ResetPasswordScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
+    const [id, setId] = useState('');
     const [email, setEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
+    const fetchUserData = async () => {
+        try {
+            const response = await api.get('/about');
+            const user = response.data;
+            setId(user.id);
+            setEmail(user.email);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     const handleResetPassword = async () => {
         const data = {
-            email: email,
+            userId: id,
             oldPassword: oldPassword,
             newPassword: newPassword,
         }
+
         try {
             await api.put('/reset-password', data);
             Alert.alert('Senha atualizada com sucesso.');
             setNewPassword('');
             setOldPassword('');
-            setEmail('');
         } catch (error) {
             Alert.alert('Erro', 'Erro ao atualizar sua senha!');
             console.log(error);
@@ -37,37 +53,40 @@ export default function ResetPasswordScreen() {
 
     return (
         <View style={styles.container}>
-            <Image
-                source={require('./cadeado.png')}
-                style={styles.image}
-            />
-            <Text style={styles.title}>Alterar sua senha</Text>
+            <View style={styles.form}> 
+                <Image
+                    source={require('./cadeado.png')}
+                    style={styles.image}
+                />
+                <Text style={styles.title}>Criar sua nova senha</Text>
+            </View>
+
             <View style={styles.form}>
-
-
                 <TextInput
                     style={styles.input}
                     value={email}
                     onChangeText={setEmail}
                     placeholder="E-mail"
                     keyboardType="email-address"
-                />
-
-                <TextInput
-                    style={styles.input}
-                    value={newPassword}
-                    onChangeText={setNewPassword}
-                    placeholder="Antiga senha"
-                    secureTextEntry={!showPassword}
+                    editable={false}
                 />
 
                 <TextInput
                     style={styles.input}
                     value={oldPassword}
                     onChangeText={setOldPassword}
+                    placeholder="Sua antiga senha"
+                    secureTextEntry={!showPassword}
+                />
+
+                <TextInput
+                    style={styles.input}
+                    value={newPassword}
+                    onChangeText={setNewPassword}
                     placeholder="Sua nova senha"
                     secureTextEntry={!showPassword}
                 />
+
                 <TouchableOpacity style={styles.buttonEye} onPress={toggleShowPassword}>
                     <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={24} color="#fff" />
                     {!showPassword && (
@@ -99,12 +118,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8FAFF'
     },
     image: {
-        marginTop: 20,
         width: 180,
         height: 180,
     },
     title: {
-        fontSize: 30,
+        fontSize: 25,
         fontWeight: 'bold',
     },
     form: {
@@ -128,7 +146,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#598381',
         marginLeft: 5,
         alignItems: 'center',
-        width: '90%',
+        width: '50%',
         height: 60,
         padding: 14,
         borderRadius: 10,

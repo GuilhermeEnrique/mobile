@@ -31,16 +31,13 @@ export default function Inventario({ route }: Props) {
     const [modalEdit, setModalEdit] = useState(false);
     const [viewItem, setViewItem] = useState<Inventario | null>(null);
     const [modalView, setModalView] = useState(false);
+    const [hasItem, setHasItem] = useState(false);
 
     const [itemId, setItemId] = useState('');
     const [name, setName] = useState('');
     const [type, setType] = useState('');
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState('');
-
-    useEffect(() => {
-        fetchItens();
-    }, []);
 
     const handleAdicionarItem = () => {
         setModalVisible(true);
@@ -99,11 +96,20 @@ export default function Inventario({ route }: Props) {
     const fetchItens = async () => {
         try {
             const response = await api.get(`/listen-inventario?personagemId=${id}`);
-            setItens(response.data.filter((item: Inventario) => item.personagemId === id));
+            if (response.data.length > 0) {
+                setItens(response.data.filter((item: Inventario) => item.personagemId === id));
+                setHasItem(true);
+            } else {
+                setHasItem(false);
+            }
         } catch (error) {
             console.log('Error fetching itens:', error);
         }
     };
+
+    useEffect(() => {
+        fetchItens();
+    }, []);
 
     const renderItens = () => {
         if (itens.length === 0) {
@@ -222,6 +228,7 @@ export default function Inventario({ route }: Props) {
         try {
             await api.delete(`/delete-item?id=${item.id}`);
             setItens((prevItens) => prevItens.filter((i) => i.id !== item.id));
+            fetchItens();
             Alert.alert('Sucesso', 'Item excluído com sucesso');
         } catch (error) {
             console.log('Erro ao excluir item:', error);
@@ -232,11 +239,12 @@ export default function Inventario({ route }: Props) {
     const handleDeleteAllItem = async () => {
         try {
             await api.delete(`/deleteAll-itens?personagemId=${id}`);
+            setItens([]);
             fetchItens();
-            Alert.alert('Sucesso', 'Inventário excluído com sucesso');
+            Alert.alert('Sucesso', 'Inventário excluído com sucesso.');
         } catch (error) {
             console.log('Erro ao apagar inventário:', error);
-            Alert.alert('Erro', 'Erro ao apagar inventário. Por favor, tente novamente mais tarde');
+            Alert.alert('Erro', 'Erro ao apagar inventário. Por favor, tente novamente mais tarde!');
         }
     };
 
@@ -254,10 +262,11 @@ export default function Inventario({ route }: Props) {
             <TouchableOpacity style={styles.buttonAdicionar} onPress={handleAdicionarItem} >
                 <Text style={styles.textButton}>Adicionar item</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonDelete} onPress={handleDeleteAllItem} >
-                <Text style={styles.textButton}>Deletar todo inventário</Text>
-            </TouchableOpacity>
-
+            {hasItem && (
+                <TouchableOpacity style={styles.buttonDelete} onPress={handleDeleteAllItem} >
+                    <Text style={styles.textButton}>Deletar todo inventário</Text>
+                </TouchableOpacity>
+            )}
             <Modal visible={modalVisible} animationType="slide">
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>

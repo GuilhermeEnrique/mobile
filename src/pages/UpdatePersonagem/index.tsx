@@ -36,9 +36,9 @@ export default function UpdatePersonagem({ route }: Props) {
     const [description, setDescription] = useState('');
     const [personality, setPersonality] = useState('');
     const [classe, setClasse] = useState('');
-    const [level, setLevel] = useState(0);
+    const [level, setLevel] = useState('');
     const [race, setRace] = useState('');
-    const [life, setLife] = useState(0);
+    const [life, setLife] = useState('');
     const [campanhasId, setCampanha] = useState('');
     const [banner, setBanner] = useState('');
 
@@ -175,8 +175,7 @@ export default function UpdatePersonagem({ route }: Props) {
                 console.log(response.data)
                 Alert.alert("Oops!", "Ocorreu um erro durante a atualização do seu personagem. Por favor, tente novamente mais tarde!")
             } else {
-                console.log(response.data)
-                Alert.alert('Parabens', `${name} atualizado com sucesso!`)
+                Alert.alert('Sucesso', `${name} atualizado com sucesso!`)
             }
         } catch (e) {
             Alert.alert("Erro", "Ocorreu um erro ao atualizar seu personagem. Tente Novamente mais tarde!");
@@ -201,15 +200,15 @@ export default function UpdatePersonagem({ route }: Props) {
                     <TextInput
                         placeholder="Pontos de vida"
                         style={styles.inputNumber}
-                        value={life.toString()}
-                        onChangeText={(text) => setLife(parseInt(text))}
+                        value={life}
+                        onChangeText={setLife}
                         keyboardType="numeric"
                     />
                     <TextInput
                         placeholder="Nível"
                         style={styles.inputNumber}
-                        value={level.toString()}
-                        onChangeText={(text) => setLevel(parseInt(text))}
+                        value={level}
+                        onChangeText={setLevel}
                         keyboardType="numeric"
                     />
                 </View>

@@ -30,14 +30,12 @@ export default function Dados() {
             return;
         }
 
-
         try {
             const response = await api.post('/roll', {
                 type,
                 quantity
             });
             const { data } = response;
-            console.log(data)
             setResults(data.result);
             setTotal(data.sum);
             // Adicione a rolagem atual ao histórico
@@ -109,12 +107,9 @@ export default function Dados() {
                         </View>
                     </Text>
                 </TouchableOpacity>
-
                 {showHistory && <History history={history} />}
             </View>
         </View>
-
-
     )
 }
 
@@ -186,7 +181,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         borderWidth: 1,
-        minHeight: 100,
+        minHeight: 50,
         marginBottom: 10,
         borderRadius: 10,
         borderColor: '#646262',

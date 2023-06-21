@@ -7,7 +7,7 @@ import { StackParmsList } from '../../routers/app.routes';
 
 type BookType = 'livroJogador' | 'manualMonstros' | 'guiaMestre';
 
-export default function Campanhas() {
+export default function Guia() {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
 
     function handleDownloadPDF(bookType: BookType) {

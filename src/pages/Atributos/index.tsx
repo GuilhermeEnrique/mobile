@@ -19,6 +19,7 @@ export default function Atributos({ route }: Props) {
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
     const [editMode, setEditMode] = useState(false);
     const [hasAtributos, setHasAtributos] = useState(false);
+    const isFocused = useIsFocused();
 
     const [force, setForce] = useState('');
     const [dexterity, setDexterity] = useState('');
@@ -44,13 +45,13 @@ export default function Atributos({ route }: Props) {
             }
         } catch (error) {
             console.log(error);
-            Alert.alert('Ocorreu um erro ao buscar os atributos.');
+            Alert.alert('Erro', 'Ocorreu um erro ao buscar os atributos.');
         }
     };
 
     useEffect(() => {
         fetchAtributos();
-    }, [])
+    }, [isFocused])
 
     const handleCreate = async () => {
         const data = {
@@ -70,12 +71,12 @@ export default function Atributos({ route }: Props) {
                 },
             });
 
-            Alert.alert('Atributos registrados com sucesso.');
+            Alert.alert('Sucesso', 'Atributos registrados com sucesso.');
             setEditMode(false);
             fetchAtributos();
         } catch (error) {
             console.log(error);
-            Alert.alert('Ocorreu um erro ao salvar os atributos.');
+            Alert.alert('Erro', 'Ocorreu um erro ao salvar os atributos. Tente novamente mais tarde!');
         }
     };
 
@@ -86,12 +87,18 @@ export default function Atributos({ route }: Props) {
                     id: personagemId
                 }
             });
-            Alert.alert('Os atributos foram excluídos.');
+            Alert.alert('Sucesso', 'Os atributos foram excluídos.');
             setEditMode(false);
+            setForce('');
+            setDexterity('');
+            setConstitution('');
+            setIntelligence('');
+            setWisdom('');
+            setCharisma('');
             fetchAtributos();
         } catch (error) {
             console.log(error);
-            Alert.alert('Ocorreu um erro ao deletar os atributos.');
+            Alert.alert('Erro', 'Ocorreu um erro ao deletar os atributos. Tente novamente mais tarde!');
         }
     };
 
@@ -108,12 +115,12 @@ export default function Atributos({ route }: Props) {
 
         try {
             const response = await api.put('/update-atributos', data);
-            Alert.alert('Atributos atualizados com sucesso.');
+            Alert.alert('Sucesso', 'Atributos atualizados com sucesso.');
             fetchAtributos();
             setEditMode(false);
         } catch (error) {
             console.log(error);
-            Alert.alert('Ocorreu um erro ao atualizar os atributos.');
+            Alert.alert('Erro', 'Ocorreu um erro ao atualizar os atributos. Tente novamente mais tarde!');
         }
     };
 
@@ -233,7 +240,6 @@ export default function Atributos({ route }: Props) {
                     </TouchableOpacity>
                 </View>
             )}
-
         </View >
     );
 }

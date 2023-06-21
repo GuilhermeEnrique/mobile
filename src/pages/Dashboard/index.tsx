@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, ScrollView, Modal, Linking } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import { StackParmsList } from "../../routers/app.routes";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -7,11 +7,14 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { api } from '../../services/api';
 
+type BookType = 'Instagram' | 'GitHub';
+
 export default function Dashboard() {
     const [profileImage, setProfileImage] = useState('');
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
     const { user, signOut, updateUser } = useContext(AuthContext);
     const isFocused = useIsFocused();
+    const [modalView, setModalView] = useState(false);
 
     useEffect(() => {
         fetchProfileImage();
@@ -59,6 +62,22 @@ export default function Dashboard() {
 
     async function Guia() {
         navigation.navigate('Guia');
+    }
+
+    function handleDownloadPDF(bookType: BookType) {
+        let pdfUrl = '';
+
+        switch (bookType) {
+            case 'Instagram':
+                pdfUrl = 'https://instagram.com/guierme16';
+                break;
+            case 'GitHub':
+                pdfUrl = 'https://github.com/GuilhermeEnrique';
+            default:
+                break;
+        }
+
+        Linking.openURL(pdfUrl);
     }
 
     return (
@@ -118,16 +137,39 @@ export default function Dashboard() {
                         />
                         <Text style={styles.textButtons}>Guias para usuários</Text>
                     </TouchableOpacity>
-                    <Image
-                        style={styles.logo}
-                        source={require('../../assets/Logo.png')} />
-                    <View style={styles.copyright}>
-                        <FontAwesome name="copyright" size={20} color="black" />
-                        <Text style={styles.textCopyright}>Dice-roll 2023</Text>
+                    <TouchableOpacity onPress={() => setModalView(true)}>
+                        <Image
+                            style={styles.logo}
+                            source={require('../../assets/Logo.png')} />
+                        <View style={styles.copyright}>
+                            <FontAwesome name="copyright" size={20} color="black" />
+                            <Text style={styles.textCopyright}>Dice-roll 2023</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+            <Modal visible={modalView} animationType="fade" transparent={modalView}>
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Sobre nós</Text>
+                        <Text style={styles.modalTitle}>Sistema Dice Roll</Text>
+                        <Text style={styles.modalConteudo}>O sistema Dice-Roll é um projeto de gerenciamento de mesas de RPG (Role-Playing Game) desenvolvido especialmente para jogadores de Dungeons & Dragons. Esse sistema permite aos jogadores gerenciar e organizar suas partidas de RPG de maneira fácil e intuitiva. </Text>
+                        <Text style={styles.modalTitle}>Desenvolvido por</Text>
+                        <Text style={styles.modalAutor}>Guilherme Enrique</Text>
+                        <View style={styles.icons}>
+                            <TouchableOpacity style={styles.iconSocial} onPress={() => handleDownloadPDF('Instagram')}>
+                                <FontAwesome name="instagram" size={40} color="black" />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.iconSocial} onPress={() => handleDownloadPDF('GitHub')}>
+                                <FontAwesome name="github" size={40} color="black" />
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity onPress={() => setModalView(false)} style={styles.buttonCancelar}>
+                            <Text style={styles.textButton}>Fechar</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
-
-            </ScrollView>
+            </Modal>
         </SafeAreaView>
     );
 }
@@ -160,7 +202,7 @@ const styles = StyleSheet.create({
         width: '90%',
 
         borderRadius: 10,
-        borderColor: 'dark',
+        borderColor: '#000',
         backgroundColor: '#EDE8E8',
         borderWidth: 1,
 
@@ -213,12 +255,21 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         height: 200,
         width: '90%',
-        borderRadius: 20,
+        borderRadius: 10,
         marginBottom: 10,
+
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 0,
+        shadowOffset: {
+            width: 10,
+            height: 10,
+        },
+        elevation: 10,
     },
     imagemButtons: {
-        width: '100%',
-        height: 200,
+        width: '99%',
+        height: 199,
         position: 'absolute',
         borderRadius: 10,
         borderWidth: 1,
@@ -249,5 +300,52 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: '600',
         marginLeft: 5
-    }
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: '#FFF',
+        padding: 20,
+        borderRadius: 10,
+        width: '90%',
+    },
+    modalTitle: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        textAlign: 'center',
+    },
+    modalAutor: {
+        fontSize: 18,
+        textAlign: 'center',
+    },
+    modalConteudo: {
+        textAlign: 'justify',
+        fontSize: 17,
+    },
+    icons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 10,
+    },
+    iconSocial: {
+        padding: 10,
+    },
+    buttonCancelar: {
+        backgroundColor: '#9F4A54',
+        width: '100%',
+        padding: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 10,
+        marginBottom: 10,
+    },
+    textButton: {
+        fontSize: 17,
+        color: '#fff',
+    },
 })

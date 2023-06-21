@@ -93,7 +93,7 @@ export default function Profile() {
 
     const fetchUserData = async () => {
         try {
-            const response = await api.get('/about'); // Rota correspondente ao backend
+            const response = await api.get('/about'); 
             const user = response.data;
 
             // Preencha os campos com as informações do usuário
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 100,
         position: 'absolute',
-        top: 160,
+        top: 170,
         right: 65,
         alignItems: 'center',
         justifyContent: 'center',
@@ -289,6 +289,8 @@ const styles = StyleSheet.create({
         width: 180,
         height: 180,
         borderRadius: 90,
+        borderWidth: 2,
+        borderColor: '#28AC92',
     },
     inputBiografia: {
         backgroundColor: '#EDE8E8',
