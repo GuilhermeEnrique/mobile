@@ -157,7 +157,10 @@ export default function Atributos({ route }: Props) {
             <View style={styles.input}>
                 <Text style={styles.titleTextInput}>Força</Text>
                 <TextInput
-                    style={styles.inputValue}
+                    style={[
+                        styles.inputValue,
+                        editMode ? { backgroundColor: '#F8FAFF' } : { backgroundColor: '#EDE8E8' }
+                    ]}
                     keyboardType="numeric"
                     value={force.toString()}
                     onChangeText={setForce}
@@ -167,7 +170,10 @@ export default function Atributos({ route }: Props) {
             <View style={styles.input}>
                 <Text style={styles.titleTextInput}>Destreza</Text>
                 <TextInput
-                    style={styles.inputValue}
+                    style={[
+                        styles.inputValue,
+                        editMode ? { backgroundColor: '#F8FAFF' } : { backgroundColor: '#EDE8E8' }
+                    ]}
                     keyboardType="numeric"
                     value={dexterity.toString()}
                     onChangeText={setDexterity}
@@ -177,7 +183,10 @@ export default function Atributos({ route }: Props) {
             <View style={styles.input}>
                 <Text style={styles.titleTextInput}>Sabedoria</Text>
                 <TextInput
-                    style={styles.inputValue}
+                    style={[
+                        styles.inputValue,
+                        editMode ? { backgroundColor: '#F8FAFF' } : { backgroundColor: '#EDE8E8' }
+                    ]}
                     keyboardType="numeric"
                     value={wisdom.toString()}
                     onChangeText={setWisdom}
@@ -187,7 +196,10 @@ export default function Atributos({ route }: Props) {
             <View style={styles.input}>
                 <Text style={styles.titleTextInput}>Inteligência</Text>
                 <TextInput
-                    style={styles.inputValue}
+                    style={[
+                        styles.inputValue,
+                        editMode ? { backgroundColor: '#F8FAFF' } : { backgroundColor: '#EDE8E8' }
+                    ]}
                     keyboardType="numeric"
                     value={intelligence.toString()}
                     onChangeText={setIntelligence}
@@ -197,7 +209,10 @@ export default function Atributos({ route }: Props) {
             <View style={styles.input}>
                 <Text style={styles.titleTextInput}>Carisma</Text>
                 <TextInput
-                    style={styles.inputValue}
+                    style={[
+                        styles.inputValue,
+                        editMode ? { backgroundColor: '#F8FAFF' } : { backgroundColor: '#EDE8E8' }
+                    ]}
                     keyboardType="numeric"
                     value={charisma.toString()}
                     onChangeText={setCharisma}
@@ -207,7 +222,10 @@ export default function Atributos({ route }: Props) {
             <View style={styles.input}>
                 <Text style={styles.titleTextInput}>Constituição</Text>
                 <TextInput
-                    style={styles.inputValue}
+                    style={[
+                        styles.inputValue,
+                        editMode ? { backgroundColor: '#F8FAFF' } : { backgroundColor: '#EDE8E8' }
+                    ]}
                     keyboardType="numeric"
                     value={constitution.toString()}
                     onChangeText={setConstitution}
@@ -287,6 +305,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     inputValue: {
+        color: '#000',
         backgroundColor: '#F8FAFF',
         width: '20%',
         fontSize: 20,
@@ -294,7 +313,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     titleTextInput: {
-        flexBasis: '80%', // Defina o valor desejado para a largura do título
+        flexBasis: '80%', 
         textAlign: 'left',
         fontSize: 16,
         color: '#000',
