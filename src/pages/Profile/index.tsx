@@ -78,10 +78,12 @@ export default function Profile() {
                 }
             })
             if (response.data.error) {
+                console.log(response.data.error)
                 Alert.alert('Error', 'Não foi possível enviar sua imagem. Por favor, tente novamente mais tarde')
             }
         } catch (e) {
-            Alert.alert('Error', 'Erro ao enviar sua imagem')
+            console.log(e);
+            Alert.alert('Error', 'Erro ao enviar sua imagem');
         }
     };
 

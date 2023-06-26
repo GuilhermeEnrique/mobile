@@ -86,12 +86,13 @@ export default function UpdateCampanha({ route }: Props) {
         try {
             const response = await api.put(`/update-campanha?id=${id}`, formData, {
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'multipart/form-data',
                 },
             });
             if (response.data.error) {
                 console.log(response.data.error)
-                Alert.alert('Error', 'Não foi possível atualizar sua campanha. Por favor, tente novamente mais tarde');
+                Alert.alert('Error', 'Não foi possível atualizar seu banner. Por favor, tente novamente mais tarde');
             } else {
                 Alert.alert('Sucesso', `Imagem  atualizada`);
                 fetchCampanhaData();
@@ -105,7 +106,6 @@ export default function UpdateCampanha({ route }: Props) {
 
     const handleUpdateCampaign = async () => {
         const formData = new FormData();
-
         formData.append('title', title);
         formData.append('description', description);
 
