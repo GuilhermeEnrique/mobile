@@ -53,6 +53,7 @@ export default function Dados() {
             <Text style={styles.title}>
                 Dados
             </Text>
+            <View style={styles.linha} />
             <View style={styles.inputContainer}>
                 <Image
                     style={styles.image}
@@ -128,6 +129,12 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontWeight: 'bold',
         color: '#000',
+    },
+    linha: {
+        marginTop: 2,
+        borderBottomColor: '#28AC92',
+        borderBottomWidth: 1,
+        width: '90%'
     },
     inputContainer: {
         flex: 1,

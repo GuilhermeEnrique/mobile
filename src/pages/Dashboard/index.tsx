@@ -44,7 +44,7 @@ export default function Dashboard() {
         }
     }
 
-    function handleDownloadPDF(bookType: BookType) {
+    function redes(bookType: BookType) {
         let pdfUrl = '';
 
         switch (bookType) {
@@ -137,10 +137,10 @@ export default function Dashboard() {
                         <Text style={styles.modalTitle}>Desenvolvido por</Text>
                         <Text style={styles.modalAutor}>Guilherme Enrique</Text>
                         <View style={styles.icons}>
-                            <TouchableOpacity style={styles.iconSocial} onPress={() => handleDownloadPDF('Instagram')}>
+                            <TouchableOpacity style={styles.iconSocial} onPress={() => redes('Instagram')}>
                                 <FontAwesome name="instagram" size={40} color="black" />
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.iconSocial} onPress={() => handleDownloadPDF('GitHub')}>
+                            <TouchableOpacity style={styles.iconSocial} onPress={() => redes('GitHub')}>
                                 <FontAwesome name="github" size={40} color="black" />
                             </TouchableOpacity>
                         </View>

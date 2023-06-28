@@ -256,11 +256,9 @@ const styles = StyleSheet.create({
     },
     preview: {
         width: '100%',
-        height: 280,
-        marginBottom: 10,
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: '#646262',
+        height: '100%',
+        resizeMode: 'cover',
+        borderRadius: 20,
     },
     picker: {
         borderWidth: 1,

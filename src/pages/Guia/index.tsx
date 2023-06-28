@@ -35,6 +35,9 @@ export default function Guia() {
             <View style={styles.container}>
                 <View style={styles.title}>
                     <Text style={styles.titleText}>Guia de usuário</Text>
+                </View>
+                    <View style={styles.linha} />
+                <View>
                     <Text style={styles.subTitleText}>Aqui você pode baixar os guias que vão te auxiliar no seu jogo de D&D 5E, incluindo as versões mais recentes dos livros-guia.</Text>
                 </View>
 
@@ -79,13 +82,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         backgroundColor: '#F8FAFF'
     },
     title: {
         alignItems: 'center',
         flexDirection: 'column',
-        margin: 20
+        marginTop: 10
     },
     titleText: {
         marginRight: 15,
@@ -94,13 +97,19 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#000',
     },
+    linha: {
+        borderBottomColor: '#28AC92',
+        borderBottomWidth: 1,
+        width: '90%'
+    },
     subTitleText: {
-        marginRight: 15,
+        marginHorizontal: 10,
         fontSize: 18,
         marginTop: 5,
         fontWeight: '500',
         color: '#000',
-        textAlign: 'justify'
+        textAlign: 'justify',
+        alignItems: 'center',
     },
     buttons: {
         margin: 10,

@@ -141,6 +141,7 @@ export default function Campanhas() {
             <View style={styles.title}>
                 <Text style={styles.titleText}>Suas campanhas</Text>
             </View>
+            <View style={styles.linha} />
 
             <View style={styles.campanhas}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -218,6 +219,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row'
     },
+    linha:{
+        marginTop: 2,
+        borderBottomColor: '#28AC92', 
+        borderBottomWidth: 1, 
+        width: '90%'
+    },
     scrollViewContent: {
         flexGrow: 1,
         justifyContent: 'center',
@@ -238,7 +245,6 @@ const styles = StyleSheet.create({
         color: '#9F4A54',
         textAlign: 'center',
         justifyContent: 'center',
-
         textShadowColor: '#000',
         textShadowOffset: { width: 3, height: 3 },
         textShadowRadius: 2,

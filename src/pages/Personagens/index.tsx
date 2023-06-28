@@ -162,6 +162,7 @@ export default function Personagens() {
             <View style={styles.title}>
                 <Text style={styles.titleText}>Seus personagens</Text>
             </View>
+            <View style={styles.linha} />
             <View style={styles.personagens}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
                     {renderPersonagens()}
@@ -248,6 +249,12 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         flexDirection: 'row'
+    },
+    linha:{
+        marginTop: 2,
+        borderBottomColor: '#28AC92', 
+        borderBottomWidth: 1, 
+        width: '90%'
     },
     scrollViewContent: {
         flexGrow: 1,

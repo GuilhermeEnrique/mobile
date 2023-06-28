@@ -138,7 +138,6 @@ export default function UpdatePersonagem({ route }: Props) {
                 },
             });
             if (response.data === '') {
-                console.log(response.data)
                 Alert.alert("Oops!", "Ocorreu um erro durante a atualização do seu personagem. Por favor, tente novamente mais tarde!")
             } else {
                 console.log(response.data)
@@ -172,7 +171,6 @@ export default function UpdatePersonagem({ route }: Props) {
             });
             Personagens();
             if (response.data === '') {
-                console.log(response.data)
                 Alert.alert("Oops!", "Ocorreu um erro durante a atualização do seu personagem. Por favor, tente novamente mais tarde!")
             } else {
                 Alert.alert('Sucesso', `${name} atualizado com sucesso!`)
@@ -248,7 +246,7 @@ export default function UpdatePersonagem({ route }: Props) {
                     value={classe}
                     onChangeText={(text) => setClasse(text)}
                 />
-                <View style={styles.picker}>
+                {/* <View style={styles.picker}>
                     <RNPickerSelect
                         value={campanhasId}
                         onValueChange={(value) => setCampanha(value)}
@@ -259,7 +257,7 @@ export default function UpdatePersonagem({ route }: Props) {
                         }}
                         items={campanhas}
                     />
-                </View>
+                </View> */}
             </ScrollView>
             <View style={styles.footer}>
                 <TouchableOpacity style={styles.ButtonSalvar} onPress={UpdatePersonagem}>
